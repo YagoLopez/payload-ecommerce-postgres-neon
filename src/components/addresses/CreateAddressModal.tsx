@@ -43,10 +43,7 @@ export const CreateAddressModal: React.FC<Props> = ({
 
   const handleCallback = (data: Partial<Address>) => {
     closeModal()
-
-    if (callback) {
-      callback(data)
-    }
+    callback?.(data)
   }
 
   return (

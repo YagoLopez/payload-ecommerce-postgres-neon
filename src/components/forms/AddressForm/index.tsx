@@ -200,14 +200,7 @@ export const AddressForm: React.FC<Props> = ({
             </SelectTrigger>
             <SelectContent>
               {supportedCountries.map((country) => {
-                const value = typeof country === 'string' ? country : country.value
-                const label =
-                  typeof country === 'string'
-                    ? country
-                    : typeof country.label === 'string'
-                      ? country.label
-                      : value
-
+                const { value, label } = country
                 return (
                   <SelectItem key={value} value={value}>
                     {label}
