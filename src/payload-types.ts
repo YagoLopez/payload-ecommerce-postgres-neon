@@ -123,7 +123,7 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string | number;
+    defaultIDType: number;
   };
   globals: {
     header: Header;
