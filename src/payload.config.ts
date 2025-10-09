@@ -86,14 +86,10 @@ export default buildConfig({
   plugins: [
     ...plugins,
     vercelBlobStorage({
-      enabled: true,
       collections: {
-        media: true,
-        // 'media-with-prefix': {
-        //   prefix: 'my-prefix',
-        // },
+        [Media.slug]: true,
       },
-      token: process.env.BLOB_READ_WRITE_TOKEN,
+      token: process.env.BLOB_READ_WRITE_TOKEN || '',
     }),
   ],
   secret: process.env.PAYLOAD_SECRET || '',
