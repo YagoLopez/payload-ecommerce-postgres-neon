@@ -102,5 +102,6 @@ export default buildConfig({
   // sharp,
   graphQL: {
     disablePlaygroundInProduction: false,
+    disableIntrospectionInProduction: false,
   }
 })
