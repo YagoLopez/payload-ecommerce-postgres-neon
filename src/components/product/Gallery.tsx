@@ -1,6 +1,6 @@
 'use client'
 
-import type { Media as MediaType, Product } from '@/payload-types'
+import type { Product } from '@/payload-types'
 
 import { Media } from '@/components/Media'
 import { GridTileImage } from '@/components/Grid/tile'
@@ -48,27 +48,31 @@ export const Gallery: React.FC<Props> = ({ gallery }) => {
   }, [searchParams, api, gallery])
 
   return (
-    <div>
-      <div className="relative w-full overflow-hidden mb-8">
-        <Media
-          resource={gallery[current].image}
-          className="w-full"
-          imgClassName="w-full rounded-lg"
-        />
+    <div className="space-y-6">
+      <div className="relative w-full overflow-hidden rounded-2xl shadow-md cursor-pointer ring-1 ring-border/50">
+        <div className="bg-gradient-to-br from-muted/50 to-muted/20 p-8">
+          <Media
+            resource={gallery[current].image}
+            className="w-full transition-transform duration-500 hover:scale-105"
+            imgClassName="w-full rounded-xl"
+          />
+        </div>
       </div>
 
       <Carousel setApi={setApi} className="w-full" opts={{ align: 'start', loop: false }}>
-        <CarouselContent>
+        <CarouselContent className="gap-3">
           {gallery.map((item, i) => {
             if (typeof item.image !== 'object') return null
 
             return (
               <CarouselItem
-                className="basis-1/5"
+                className="basis-1/5 cursor-pointer"
                 key={`${item.image.id}-${i}`}
                 onClick={() => setCurrent(i)}
               >
-                <GridTileImage active={i === current} media={item.image} />
+                <div className={`rounded-xl overflow-hidden transition-all duration-300`}>
+                  <GridTileImage active={i === current} media={item.image} />
+                </div>
               </CarouselItem>
             )
           })}

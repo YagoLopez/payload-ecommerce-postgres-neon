@@ -32,8 +32,8 @@ export function VariantSelector({ product }: { product: Product }) {
     }
 
     return (
-      <dl className="" key={type.id}>
-        <dt className="mb-4 text-sm">{type.label}</dt>
+      <dl className="space-y-4" key={type.id}>
+        <dt className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">{type.label}</dt>
         <dd className="flex flex-wrap gap-3">
           <React.Fragment>
             {options?.map((option) => {
@@ -79,11 +79,7 @@ export function VariantSelector({ product }: { product: Product }) {
                   // If we found a matching variant, set the variant ID in the search params.
                   optionSearchParams.set('variant', String(matchingVariant.id))
 
-                  if (matchingVariant.inventory && matchingVariant.inventory > 0) {
-                    isAvailableForSale = true
-                  } else {
-                    isAvailableForSale = false
-                  }
+                  isAvailableForSale = !!(matchingVariant.inventory && matchingVariant.inventory > 0);
                 }
               }
 
@@ -96,11 +92,16 @@ export function VariantSelector({ product }: { product: Product }) {
 
               return (
                 <Button
-                  variant={'ghost'}
+                  variant={'outline'}
                   aria-disabled={!isAvailableForSale}
-                  className={clsx('px-2', {
-                    'bg-primary/5 text-primary': isActive,
-                  })}
+                  className={clsx(
+                    'px-6 py-3 rounded-xl font-medium transition-all duration-300',
+                    'hover:shadow-md hover:-translate-y-0.5',
+                    {
+                      'bg-accent text-accent-foreground ring-2 ring-accent shadow-lg scale-105': isActive,
+                      'opacity-50 cursor-not-allowed': !isAvailableForSale,
+                    }
+                  )}
                   disabled={!isAvailableForSale}
                   key={option.id}
                   onClick={() => {
