@@ -4,15 +4,13 @@ import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { GridTileImage } from '@/components/Grid/tile'
 import { Gallery } from '@/components/product/Gallery'
 import { ProductDescription } from '@/components/product/ProductDescription'
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
-import { draftMode } from 'next/headers'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import React, { Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import { ChevronLeftIcon } from 'lucide-react'
 import { Metadata } from 'next'
+import { ProductsRepository } from '@/repositories/ProductsRepository'
 
 type Args = {
   params: Promise<{
@@ -22,7 +20,7 @@ type Args = {
 
 export async function generateMetadata({ params }: Args): Promise<Metadata> {
   const { slug } = await params
-  const product = await queryProductBySlug({ slug })
+  const product = await ProductsRepository.getBySlug({ slug })
 
   if (!product) return notFound()
 
@@ -61,7 +59,7 @@ export async function generateMetadata({ params }: Args): Promise<Metadata> {
 
 export default async function ProductPage({ params }: Args) {
   const { slug } = await params
-  const product = await queryProductBySlug({ slug })
+  const product = await ProductsRepository.getBySlug({ slug })
 
   if (!product) return notFound()
 
@@ -182,39 +180,4 @@ function RelatedProducts({ products }: { products: Product[] }) {
       </ul>
     </div>
   )
-}
-
-const queryProductBySlug = async ({ slug }: { slug: string }) => {
-  const { isEnabled: draft } = await draftMode()
-
-  const payload = await getPayload({ config: configPromise })
-
-  const result = await payload.find({
-    collection: 'products',
-    depth: 3,
-    draft,
-    limit: 1,
-    overrideAccess: draft,
-    pagination: false,
-    where: {
-      and: [
-        {
-          slug: {
-            equals: slug,
-          },
-        },
-        ...(draft ? [] : [{ _status: { equals: 'published' } }]),
-      ],
-    },
-    populate: {
-      variants: {
-        title: true,
-        priceInUSD: true,
-        inventory: true,
-        options: true,
-      },
-    },
-  })
-
-  return result.docs?.[0] || null
 }
