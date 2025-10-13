@@ -52,10 +52,12 @@ export function ProductDescription({ product }: { product: Product }) {
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-        <h1 className="text-2xl font-medium">{product.title}</h1>
-        <div className="uppercase font-mono">
+    <div className="flex flex-col gap-8">
+      <div className="space-y-4">
+        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+          {product.title}
+        </h1>
+        <div className="text-3xl font-bold font-mono">
           {hasVariants ? (
             <Price highestAmount={highestAmount} lowestAmount={lowestAmount} />
           ) : (
@@ -63,26 +65,33 @@ export function ProductDescription({ product }: { product: Product }) {
           )}
         </div>
       </div>
+      
       {product.description ? (
-        <RichText className="" data={product.description} enableGutter={false} />
+        <div className="prose prose-lg max-w-none text-muted-foreground leading-relaxed">
+          <RichText className="" data={product.description} enableGutter={false} />
+        </div>
       ) : null}
-      <hr />
+      
+      <hr className="border-border/50" />
+      
       {hasVariants && (
         <>
-          <Suspense fallback={null}>
-            <VariantSelector product={product} />
-          </Suspense>
-
-          <hr />
+          <div className="space-y-4">
+            <Suspense fallback={null}>
+              <VariantSelector product={product} />
+            </Suspense>
+          </div>
+          <hr className="border-border/50" />
         </>
       )}
-      <div className="flex items-center justify-between">
+      
+      <div className="flex items-center justify-between py-2">
         <Suspense fallback={null}>
           <StockIndicator product={product} />
         </Suspense>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="sticky bottom-0 bg-primary-foreground/95 backdrop-blur-sm py-4 -mx-8 px-8 border-t border-border/50">
         <Suspense fallback={null}>
           <AddToCart product={product} />
         </Suspense>

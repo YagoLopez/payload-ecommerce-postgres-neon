@@ -6,8 +6,9 @@ import type { Product, Variant } from '@/payload-types'
 import { useCart } from '@payloadcms/plugin-ecommerce/client/react'
 import clsx from 'clsx'
 import { useSearchParams } from 'next/navigation'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { toast } from 'sonner'
+import { LoadingSpinner } from '@/components/LoadingSpinner'
 type Props = {
   product: Product
 }
@@ -15,6 +16,7 @@ type Props = {
 export function AddToCart({ product }: Props) {
   const { addItem, cart } = useCart()
   const searchParams = useSearchParams()
+  const [isLoading, setIsLoading] = useState(false)
 
   const variants = product.variants?.docs || []
 
@@ -38,15 +40,19 @@ export function AddToCart({ product }: Props) {
   }, [product.enableVariants, searchParams, variants])
 
   const addToCart = useCallback(
-    (e: React.FormEvent<HTMLButtonElement>) => {
+    async (e: React.FormEvent<HTMLButtonElement>) => {
       e.preventDefault()
 
-      addItem({
-        product: product.id,
-        variant: selectedVariant?.id ?? undefined,
-      }).then(() => {
+      setIsLoading(true)
+      try {
+        await addItem({
+          product: product.id,
+          variant: selectedVariant?.id ?? undefined,
+        })
         toast.success('Item added to cart.')
-      })
+      } finally {
+        setIsLoading(false)
+      }
     },
     [addItem, product, selectedVariant],
   )
@@ -101,11 +107,11 @@ export function AddToCart({ product }: Props) {
       className={clsx({
         'hover:opacity-90': true,
       })}
-      disabled={disabled}
+      disabled={disabled || isLoading}
       onClick={addToCart}
       type="submit"
     >
-      Add To Cart
+      {isLoading && <LoadingSpinner size="small" /> } Add To Cart
     </Button>
   )
 }

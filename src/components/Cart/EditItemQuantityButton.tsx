@@ -4,10 +4,12 @@ import { CartItem } from '@/components/Cart'
 import { useCart } from '@payloadcms/plugin-ecommerce/client/react'
 import clsx from 'clsx'
 import { MinusIcon, PlusIcon } from 'lucide-react'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
+import { LoadingSpinner } from '@/components/LoadingSpinner'
 
 export function EditItemQuantityButton({ type, item }: { item: CartItem; type: 'minus' | 'plus' }) {
   const { decrementItem, incrementItem } = useCart()
+  const [ isLoading, setIsLoading ] = useState(false)
 
   const disabled = useMemo(() => {
     if (!item.id) return true
@@ -33,6 +35,8 @@ export function EditItemQuantityButton({ type, item }: { item: CartItem; type: '
     return false
   }, [item, type])
 
+  if (isLoading) return <LoadingSpinner size="small" className="mx-2" />
+
   return (
     <form>
       <button
@@ -46,15 +50,21 @@ export function EditItemQuantityButton({ type, item }: { item: CartItem; type: '
             'ml-auto': type === 'minus',
           },
         )}
-        onClick={(e: React.FormEvent<HTMLButtonElement>) => {
+        onClick={async (e: React.FormEvent<HTMLButtonElement>) => {
           e.preventDefault()
 
           if (item.id) {
+            setIsLoading(true)
             if (type === 'plus') {
-              incrementItem(Number(item.id))
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              await incrementItem(item.id)
             } else {
-              decrementItem(Number(item.id))
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              await decrementItem(item.id)
             }
+            setIsLoading(false)
           }
         }}
         type="button"
