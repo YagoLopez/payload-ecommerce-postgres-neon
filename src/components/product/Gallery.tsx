@@ -66,11 +66,11 @@ export const Gallery: React.FC<Props> = ({ gallery }) => {
 
             return (
               <CarouselItem
-                className="basis-1/5 cursor-pointer"
+                className="basis-1/3 cursor-pointer"
                 key={`${item.image.id}-${i}`}
                 onClick={() => setCurrent(i)}
               >
-                <div className={`rounded-xl overflow-hidden transition-all duration-300`}>
+                <div className={`overflow-hidden transition-all duration-300 shadow-lg`}>
                   <GridTileImage active={i === current} media={item.image} />
                 </div>
               </CarouselItem>
