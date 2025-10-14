@@ -9,6 +9,7 @@ import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
+import NextTopLoader from 'nextjs-toploader';
 import React from 'react'
 import './globals.css'
 
@@ -50,6 +51,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <InitTheme />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+        <title>NextJS Ecommerce - Customized By Yago López</title>
       </head>
       <body>
         <Providers>
@@ -57,6 +59,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <LivePreviewListener />
 
           <Header />
+          <NextTopLoader />
           <main>{children}</main>
           <Footer />
         </Providers>
