@@ -9,6 +9,7 @@ import { useSearchParams } from 'next/navigation'
 import React, { useCallback, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
+import { ShoppingCart } from 'lucide-react'
 type Props = {
   product: Product
 }
@@ -103,7 +104,7 @@ export function AddToCart({ product }: Props) {
   return (
     <Button
       aria-label="Add to cart"
-      variant={'outline'}
+      variant={'default'}
       className={clsx({
         'hover:opacity-90': true,
       })}
@@ -111,7 +112,7 @@ export function AddToCart({ product }: Props) {
       onClick={addToCart}
       type="submit"
     >
-      {isLoading && <LoadingSpinner size="small" /> } Add To Cart
+      {isLoading ? <LoadingSpinner size="small" className="text-white" /> : <ShoppingCart /> } Add To Cart
     </Button>
   )
 }
