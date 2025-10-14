@@ -91,7 +91,7 @@ export function ProductDescription({ product }: { product: Product }) {
         </Suspense>
       </div>
 
-      <div className="sticky bottom-0 bg-primary-foreground/95 backdrop-blur-sm py-4 -mx-8 px-8 border-t border-border/50">
+      <div className="bg-primary-foreground/95 backdrop-blur-sm py-4 -mx-8 px-8 border-t border-border/50">
         <Suspense fallback={null}>
           <AddToCart product={product} />
         </Suspense>

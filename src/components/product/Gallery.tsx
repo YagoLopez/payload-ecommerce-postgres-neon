@@ -49,11 +49,11 @@ export const Gallery: React.FC<Props> = ({ gallery }) => {
 
   return (
     <div className="space-y-6">
-      <div className="relative w-full overflow-hidden rounded-2xl shadow-md cursor-pointer ring-1 ring-border/50">
+      <div className="relative w-full overflow-hidden rounded-2xl shadow-md ring-1 ring-border/50">
         <div className="bg-gradient-to-br from-muted/50 to-muted/20 p-8">
           <Media
             resource={gallery[current].image}
-            className="w-full transition-transform duration-500 hover:scale-105"
+            className="w-full"
             imgClassName="w-full rounded-xl"
           />
         </div>
