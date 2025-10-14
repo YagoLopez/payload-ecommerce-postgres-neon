@@ -1,5 +1,5 @@
 import path from 'path'
-import { test, expect, Page } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
 import { fileURLToPath } from 'url'
 
 const filename = fileURLToPath(import.meta.url)
