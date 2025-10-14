@@ -9,17 +9,20 @@ import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
+import NextTopLoader from 'nextjs-toploader';
 import React from 'react'
 import './globals.css'
+import { Metadata } from 'next'
 
-/* const { SITE_NAME, TWITTER_CREATOR, TWITTER_SITE } = process.env
+const SITE_NAME = 'NextJS Ecommerce 🛒 Customized By Yago López 🛍️'
+const { TWITTER_CREATOR, TWITTER_SITE } = process.env
 const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
   ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
   : 'http://localhost:3000'
 const twitterCreator = TWITTER_CREATOR ? ensureStartsWith(TWITTER_CREATOR, '@') : undefined
 const twitterSite = TWITTER_SITE ? ensureStartsWith(TWITTER_SITE, 'https://') : undefined
- */
-/* export const metadata = {
+
+export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   robots: {
     follow: true,
@@ -37,7 +40,7 @@ const twitterSite = TWITTER_SITE ? ensureStartsWith(TWITTER_SITE, 'https://') : 
         site: twitterSite,
       },
     }),
-} */
+}
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -57,6 +60,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <LivePreviewListener />
 
           <Header />
+          <NextTopLoader color={"#9ACDDF"} />
           <main>{children}</main>
           <Footer />
         </Providers>

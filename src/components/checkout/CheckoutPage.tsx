@@ -122,7 +122,7 @@ export const CheckoutPage: React.FC = () => {
     return (
       <div className="prose dark:prose-invert py-12 w-full items-center">
         <p>Your cart is empty.</p>
-        <Link href="/search">Continue shopping?</Link>
+        <Link href="/shop">Continue shopping?</Link>
       </div>
     )
   }
@@ -358,7 +358,7 @@ export const CheckoutPage: React.FC = () => {
             if (typeof item.product === 'object' && item.product) {
               const {
                 product,
-                product: { id, meta, title, gallery },
+                product: { meta, title, gallery },
                 quantity,
                 variant,
               } = item
