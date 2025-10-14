@@ -11,6 +11,7 @@ import type { Header } from 'src/payload-types'
 import { LogoIcon } from '@/components/icons/logo'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/utilities/cn'
+import { ShoppingCart } from 'lucide-react'
 
 type Props = {
   header: Header
@@ -54,8 +55,9 @@ export function HeaderClient({ header }: Props) {
             ) : null}
           </div>
 
-          <div className="flex justify-end md:w-1/3 gap-4">
+          <div className="flex justify-end md:w-1/3 gap-1.5">
             <Suspense fallback={<OpenCartButton />}>
+              <ShoppingCart className="h-5 w-5 my-1 text-primary/50"/>
               <Cart />
             </Suspense>
           </div>
