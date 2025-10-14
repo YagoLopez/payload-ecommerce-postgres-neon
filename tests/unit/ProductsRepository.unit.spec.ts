@@ -141,8 +141,8 @@ describe('ProductsRepository', () => {
 
   describe('getAll', () => {
     const mockProducts = [
-      { id: '1', title: 'Product 1', slug: 'product-1' },
-      { id: '2', title: 'Product 2', slug: 'product-2' }
+      { id: 1, title: 'Product 1', slug: 'product-1' },
+      { id: 2, title: 'Product 2', slug: 'product-2' }
     ]
 
     it('should return all products with default parameters', async () => {

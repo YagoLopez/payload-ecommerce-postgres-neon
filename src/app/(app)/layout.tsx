@@ -60,7 +60,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <LivePreviewListener />
 
           <Header />
-          <NextTopLoader />
+          <NextTopLoader color={"#9ACDDF"} />
           <main>{children}</main>
           <Footer />
         </Providers>
