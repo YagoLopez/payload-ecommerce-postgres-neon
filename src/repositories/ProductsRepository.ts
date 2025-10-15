@@ -4,9 +4,9 @@ import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 
 type FindAllOptions = {
-  searchValue?: string,
-  sort?: string
-  category?: string
+  searchValue?: string | string[],
+  sort?: string | string[],
+  category?: string | string[],
 }
 
 const payload = await getPayload({ config: configPromise })
