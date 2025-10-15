@@ -4,15 +4,16 @@ import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 
 type FindAllOptions = {
-  searchValue: string,
+  searchValue?: string,
   sort?: string
   category?: string
 }
 
+const payload = await getPayload({ config: configPromise })
+
 export class ProductsRepository {
   static async getBySlug({ slug }: { slug: string }): Promise<Product | null> {
     const { isEnabled: draft } = await draftMode()
-    const payload = await getPayload({ config: configPromise })
 
     const result = await payload.find({
       collection: 'products',
@@ -44,8 +45,7 @@ export class ProductsRepository {
     return result.docs?.[0] || null
   }
 
-  static async getAll({ searchValue, sort, category }: FindAllOptions = {searchValue: ""}) {
-    const payload = await getPayload({ config: configPromise })
+  static async getAll({ searchValue, sort, category }: FindAllOptions = {}) {
 
     return await payload.find({
       collection: 'products',

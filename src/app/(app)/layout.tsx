@@ -14,7 +14,7 @@ import React from 'react'
 import './globals.css'
 import { Metadata } from 'next'
 
-const SITE_NAME = 'NextJS Ecommerce 🛒 Customized By Yago López 🛍️'
+const SITE_NAME = '🛒 NextJS Ecommerce. Customized By Yago López'
 const { TWITTER_CREATOR, TWITTER_SITE } = process.env
 const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
   ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
@@ -57,11 +57,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       </head>
       <body>
         <Providers>
+          <NextTopLoader />
           <LivePreviewListener />
           <AdminBar />
-
           <Header />
-          <NextTopLoader />
           <main>{children}</main>
           <Footer />
         </Providers>
