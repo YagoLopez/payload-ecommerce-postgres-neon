@@ -58,7 +58,7 @@ export const ProductGridItem: React.FC<Props> = ({ product }) => {
           </div>
 
           {typeof price === 'number' && (
-            <div className="font-semibold text-primary/60 group-hover:bg-gray-100 px-2 rounded-md transition-colors duration-300">
+            <div className="font-semibold text-primary/60 group-hover:bg-gray-200 px-2 mx-2 rounded-md transition-colors duration-300">
               <Price amount={price} />
             </div>
           )}
