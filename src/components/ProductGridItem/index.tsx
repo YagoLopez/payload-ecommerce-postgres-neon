@@ -33,7 +33,7 @@ export const ProductGridItem: React.FC<Props> = ({ product }) => {
 
   return (
     <Link 
-      className="relative inline-block h-full w-full group shadow-lg group-hover:shadow-2xl transition-shadow duration-300 ring-1 ring-border group-hover:ring-accent/50 bg-primary-foreground rounded-lg"
+      className="relative inline-block h-full w-full group shadow-md hover:shadow-xl hover:shadow-black/20 transition-all duration-500 ease-out ring-1 ring-border group-hover:ring-accent/50 bg-primary-foreground rounded-lg transform hover:-translate-y-1 hover:scale-[1.02]"
       href={`/products/${product.slug}`}
     >
       <div className="relative transition-all duration-300 ease-out">
