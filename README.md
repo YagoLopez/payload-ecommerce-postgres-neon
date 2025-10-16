@@ -1,10 +1,10 @@
-# Payload Ecommerce Template
+# Payload Ecommerce Customized By Yago López
 
-This template is in **BETA**.
+This is a fork of the official [Payload Ecommerce](https://github.com/payloadcms/payload/blob/main/templates/ecommerce). 
+This repo includes a fully-working backend, enterprise-grade admin panel, and a beautifully designed, production-ready ecommerce website.
 
-This is the official [Payload Ecommerce Template](https://github.com/payloadcms/payload/blob/main/templates/ecommerce). This repo includes a fully-working backend, enterprise-grade admin panel, and a beautifully designed, production-ready ecommerce website.
-
-This template is right for you if you are working on building an ecommerce project or shop with Payload.
+This fork impoves the frontend Ecommerce user interface and the architecture of the code using the Repository Pattern to
+model and abstract the domain entities like, Pages and Products.
 
 Core features:
 
