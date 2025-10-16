@@ -3,8 +3,6 @@ import type { Metadata } from 'next'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
 import { homeStaticData } from '@/endpoints/seed/home-static'
 import React from 'react'
 
@@ -13,17 +11,7 @@ import { notFound } from 'next/navigation'
 import { PagesRepository } from '@/repositories/PagesRepository'
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const pages = await payload.find({
-    collection: 'pages',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: {
-      slug: true,
-    },
-  })
+  const pages = await PagesRepository.getAll()
 
   return pages.docs
     ?.filter((doc) => {
@@ -35,6 +23,13 @@ export async function generateStaticParams() {
 
 }
 
+export async function generateMetadata({ params }: Args): Promise<Metadata> {
+  const { slug = 'home' } = await params
+  const page = await PagesRepository.getPageBySlug({ slug })
+
+  return generateMeta({ doc: page })
+}
+
 type Args = {
   params: Promise<{
     slug?: string
@@ -44,9 +39,7 @@ type Args = {
 export default async function Page({ params }: Args) {
   const { slug = 'home' } = await params
 
-  let page = await PagesRepository.getPageBySlug({
-    slug,
-  })
+  let page = await PagesRepository.getPageBySlug({ slug })
 
   // Remove this code once your website is seeded
   if (!page && slug === 'home') {
@@ -67,12 +60,3 @@ export default async function Page({ params }: Args) {
   )
 }
 
-export async function generateMetadata({ params }: Args): Promise<Metadata> {
-  const { slug = 'home' } = await params
-
-  const page = await PagesRepository.getPageBySlug({
-    slug,
-  })
-
-  return generateMeta({ doc: page })
-}

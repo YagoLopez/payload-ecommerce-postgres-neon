@@ -29,4 +29,17 @@ export class PagesRepository {
 
     return result.docs?.[0] || null
   }
+
+  static async getAll() {
+    return await payload.find({
+      collection: 'pages',
+      draft: false,
+      limit: 1000,
+      overrideAccess: false,
+      pagination: false,
+      select: {
+        slug: true,
+      },
+    })
+  }
 }

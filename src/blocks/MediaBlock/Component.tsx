@@ -43,7 +43,7 @@ export const MediaBlock: React.FC<
       )}
     >
       <Media
-        imgClassName={cn('border border-border rounded-[0.8rem] shadow-lg', imgClassName)}
+        imgClassName={cn('border border-border rounded-[0.8rem] shadow-lg shadow-black/10 drop-shadow-2xl', imgClassName)}
         resource={media}
         src={staticImage}
       />
