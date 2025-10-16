@@ -5,12 +5,12 @@ import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import { draftMode } from 'next/headers'
 import { homeStaticData } from '@/endpoints/seed/home-static'
 import React from 'react'
 
 import type { Page } from '@/payload-types'
 import { notFound } from 'next/navigation'
+import { PagesRepository } from '@/repositories/PagesRepository'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -25,7 +25,7 @@ export async function generateStaticParams() {
     },
   })
 
-  const params = pages.docs
+  return pages.docs
     ?.filter((doc) => {
       return doc.slug !== 'home'
     })
@@ -33,7 +33,6 @@ export async function generateStaticParams() {
       return { slug }
     })
 
-  return params
 }
 
 type Args = {
@@ -44,9 +43,8 @@ type Args = {
 
 export default async function Page({ params }: Args) {
   const { slug = 'home' } = await params
-  const url = '/' + slug
 
-  let page = await queryPageBySlug({
+  let page = await PagesRepository.getPageBySlug({
     slug,
   })
 
@@ -72,35 +70,9 @@ export default async function Page({ params }: Args) {
 export async function generateMetadata({ params }: Args): Promise<Metadata> {
   const { slug = 'home' } = await params
 
-  const page = await queryPageBySlug({
+  const page = await PagesRepository.getPageBySlug({
     slug,
   })
 
   return generateMeta({ doc: page })
-}
-
-const queryPageBySlug = async ({ slug }: { slug: string }) => {
-  const { isEnabled: draft } = await draftMode()
-
-  const payload = await getPayload({ config: configPromise })
-
-  const result = await payload.find({
-    collection: 'pages',
-    draft,
-    limit: 1,
-    overrideAccess: draft,
-    pagination: false,
-    where: {
-      and: [
-        {
-          slug: {
-            equals: slug,
-          },
-        },
-        ...(draft ? [] : [{ _status: { equals: 'published' } }]),
-      ],
-    },
-  })
-
-  return result.docs?.[0] || null
 }
