@@ -103,5 +103,6 @@ export default buildConfig({
   graphQL: {
     disablePlaygroundInProduction: false,
     disableIntrospectionInProduction: false,
-  }
+  },
+  telemetry: false
 })
