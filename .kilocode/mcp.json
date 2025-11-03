@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "payload-cms-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "payload-cms-mcp"
+      ]
+    }
+  }
+}
