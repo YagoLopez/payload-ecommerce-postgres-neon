@@ -1,6 +1,6 @@
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import { seoPlugin } from '@payloadcms/plugin-seo'
-import { Plugin } from 'payload'
+import { FieldAccess, Plugin } from 'payload'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { ecommercePlugin } from '@payloadcms/plugin-ecommerce'
@@ -10,11 +10,7 @@ import { stripeAdapter } from '@payloadcms/plugin-ecommerce/payments/stripe'
 import { Page, Product } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 import { ProductsCollection } from '@/collections/Products'
-import { adminOrCustomerOwner } from '@/access/adminOrCustomerOwner'
-import { adminOrPublishedStatus } from '@/access/adminOrPublishedStatus'
 import { adminOnly } from '@/access/adminOnly'
-import { adminOnlyFieldAccess } from '@/access/adminOnlyFieldAccess'
-import { customerOnlyFieldAccess } from '@/access/customerOnlyFieldAccess'
 import { adminOrReadOnly } from '@/access/adminOrReadOnly'
 
 const generateTitle: GenerateTitle<Product | Page> = ({ doc }) => {
@@ -81,10 +77,10 @@ export const plugins: Plugin[] = [
   ecommercePlugin({
     access: {
       adminOnly,
-      adminOnlyFieldAccess,
-      adminOrCustomerOwner,
-      adminOrPublishedStatus,
-      customerOnlyFieldAccess,
+      adminOnlyFieldAccess: adminOnly as FieldAccess,
+      adminOrCustomerOwner: adminOnly,
+      adminOrPublishedStatus: adminOnly,
+      customerOnlyFieldAccess: adminOnly as FieldAccess,
     },
     customers: {
       slug: 'users',

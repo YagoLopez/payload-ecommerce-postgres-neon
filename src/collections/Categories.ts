@@ -6,8 +6,10 @@ import { adminOnly } from '@/access/adminOnly'
 export const Categories: CollectionConfig = {
   slug: 'categories',
   access: {
+    create: adminOnly,
     read: adminOrReadOnly,
     update: adminOnly,
+    delete: adminOnly,
   },
   admin: {
     useAsTitle: 'title',

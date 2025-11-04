@@ -25,8 +25,10 @@ import { adminOnly } from '@/access/adminOnly'
 export const ProductsCollection: CollectionOverride = ({ defaultCollection }) => ({
   ...defaultCollection,
   access: {
+    create: adminOnly,
     read: adminOrReadOnly,
     update: adminOnly,
+    delete: adminOnly,
   },
   admin: {
     ...defaultCollection?.admin,

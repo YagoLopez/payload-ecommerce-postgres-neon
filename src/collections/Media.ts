@@ -19,8 +19,10 @@ export const Media: CollectionConfig = {
   },
   slug: 'media',
   access: {
+    create: adminOnly,
     read: adminOrReadOnly,
     update: adminOnly,
+    delete: adminOnly,
   },
   fields: [
     {
