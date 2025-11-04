@@ -19,9 +19,15 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 import { DefaultDocumentIDType, Where } from 'payload'
+import { adminOrReadOnly } from '@/access/adminOrReadOnly'
+import { adminOnly } from '@/access/adminOnly'
 
 export const ProductsCollection: CollectionOverride = ({ defaultCollection }) => ({
   ...defaultCollection,
+  access: {
+    read: adminOrReadOnly,
+    update: adminOnly,
+  },
   admin: {
     ...defaultCollection?.admin,
     defaultColumns: ['title', 'enableVariants', '_status', 'variants.variants'],
