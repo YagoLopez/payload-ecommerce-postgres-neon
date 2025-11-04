@@ -15,6 +15,7 @@ import { adminOrPublishedStatus } from '@/access/adminOrPublishedStatus'
 import { adminOnly } from '@/access/adminOnly'
 import { adminOnlyFieldAccess } from '@/access/adminOnlyFieldAccess'
 import { customerOnlyFieldAccess } from '@/access/customerOnlyFieldAccess'
+import { adminOrReadOnly } from '@/access/adminOrReadOnly'
 
 const generateTitle: GenerateTitle<Product | Page> = ({ doc }) => {
   return doc?.title ? `${doc.title} | Payload Ecommerce Template` : 'Payload Ecommerce Template'
@@ -39,10 +40,22 @@ export const plugins: Plugin[] = [
       admin: {
         group: 'Content',
       },
+      access: {
+        read: adminOrReadOnly,
+        create: adminOnly,
+        update: adminOnly,
+        delete: adminOnly,
+      },
     },
     formOverrides: {
       admin: {
         group: 'Content',
+      },
+      access: {
+        read: adminOrReadOnly,
+        create: adminOnly,
+        update: adminOnly,
+        delete: adminOnly,
       },
       fields: ({ defaultFields }) => {
         return defaultFields.map((field) => {
