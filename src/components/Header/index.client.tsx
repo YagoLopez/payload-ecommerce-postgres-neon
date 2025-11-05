@@ -54,7 +54,7 @@ export function HeaderClient({ header }: Props) {
             ) : null}
           </div>
 
-          <div className="flex justify-end md:w-1/3 gap-4">
+          <div className="flex justify-end md:w-1/3 gap-1.5">
             <Suspense fallback={<OpenCartButton />}>
               <Cart />
             </Suspense>

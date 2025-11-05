@@ -1,7 +1,7 @@
 import { Banner } from '@payloadcms/ui'
 import React from 'react'
 
-import { SeedButton } from './SeedButton'
+// import { SeedButton } from './SeedButton'
 import './index.scss'
 
 const baseClass = 'before-dashboard'
@@ -10,14 +10,22 @@ export const BeforeDashboard: React.FC = () => {
   return (
     <div className={baseClass}>
       <Banner className={`${baseClass}__banner`} type="success">
-        <h4>Welcome to your dashboard!</h4>
+        <h4>Welcome to the Ecommerce Dashboard</h4>
       </Banner>
-      Here&apos;s what to do next:
+      {/*Here&apos;s what to do next:*/}
+      <div className="note">
+        🔖️ Guest users only have permissions to <b>read</b> data and don&#39;t have permissions
+        to <b>modify</b> data
+      </div>
+      {/*
       <ul className={`${baseClass}__instructions`}>
+        <li>
+        </li>
+
         <li>
           <SeedButton />
           {' with a few products and pages to jump-start your new project, then '}
-          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+           eslint-disable-next-line @next/next/no-html-link-for-pages
           <a href="/">visit your website</a>
           {' to see the results.'}
         </li>
@@ -70,7 +78,8 @@ export const BeforeDashboard: React.FC = () => {
           {' docs.'}
         </li>
       </ul>
-      {'Pro Tip: This block is a '}
+*/}
+      {/*      {'Pro Tip: This block is a '}
       <a
         href="https://payloadcms.com/docs/admin/components#base-component-overrides"
         rel="noopener noreferrer"
@@ -78,7 +87,7 @@ export const BeforeDashboard: React.FC = () => {
       >
         custom component
       </a>
-      , you can remove it at any time by updating your <strong>payload.config</strong>.
+      , you can remove it at any time by updating your <strong>payload.config</strong>.*/}
     </div>
   )
 }

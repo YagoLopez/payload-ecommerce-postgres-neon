@@ -4,18 +4,16 @@ import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 
 type FindAllOptions = {
-  searchValue?: string | string[]
-  sort?: string | string[]
-  category?: string | string[]
+  searchValue?: string | string[],
+  sort?: string | string[],
+  category?: string | string[],
 }
 
+const payload = await getPayload({ config: configPromise })
 
 export class ProductsRepository {
-
   static async getBySlug({ slug }: { slug: string }): Promise<Product | null> {
     const { isEnabled: draft } = await draftMode()
-    const payload = await getPayload({ config: configPromise })
-
 
     const result = await payload.find({
       collection: 'products',
@@ -49,8 +47,6 @@ export class ProductsRepository {
 
   static async getAll({ searchValue, sort, category }: FindAllOptions = {}) {
 
-    const payload = await getPayload({ config: configPromise })
-
     return await payload.find({
       collection: 'products',
       draft: false,
@@ -78,11 +74,6 @@ export class ProductsRepository {
                         or: [
                           {
                             title: {
-                              like: searchValue,
-                            },
-                          },
-                          {
-                            description: {
                               like: searchValue,
                             },
                           },

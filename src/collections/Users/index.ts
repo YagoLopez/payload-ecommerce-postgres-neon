@@ -2,19 +2,20 @@ import type { CollectionConfig } from 'payload'
 
 import { adminOnly } from '@/access/adminOnly'
 import { adminOnlyFieldAccess } from '@/access/adminOnlyFieldAccess'
-import { publicAccess } from '@/access/publicAccess'
 import { adminOrSelf } from '@/access/adminOrSelf'
 import { checkRole } from '@/access/utilities'
 
 import { ensureFirstUserIsAdmin } from './hooks/ensureFirstUserIsAdmin'
+import { adminOrReadOnly } from '@/access/adminOrReadOnly'
+import { publicAccess } from '@/access/publicAccess'
 
 export const Users: CollectionConfig = {
   slug: 'users',
   access: {
-    admin: ({ req: { user } }) => checkRole(['admin'], user),
+    admin: ({ req: { user } }) => checkRole(['admin', 'read-only'], user),
     create: publicAccess,
     delete: adminOnly,
-    read: adminOrSelf,
+    read: adminOrReadOnly,
     update: adminOrSelf,
   },
   admin: {
@@ -47,6 +48,10 @@ export const Users: CollectionConfig = {
         {
           label: 'admin',
           value: 'admin',
+        },
+        {
+          label: 'read-only',
+          value: 'read-only',
         },
         {
           label: 'customer',

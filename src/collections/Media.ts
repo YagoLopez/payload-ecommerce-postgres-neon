@@ -7,6 +7,7 @@ import {
 } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { adminOnly } from '@/access/adminOnly'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -17,7 +18,10 @@ export const Media: CollectionConfig = {
   },
   slug: 'media',
   access: {
+    create: adminOnly,
     read: () => true,
+    update: adminOnly,
+    delete: adminOnly,
   },
   fields: [
     {

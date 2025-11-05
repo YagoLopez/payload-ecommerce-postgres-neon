@@ -5,7 +5,7 @@ import React from 'react'
 import { RichText } from '@/components/RichText'
 import type { MediaBlock as MediaBlockProps } from '@/payload-types'
 
-import { Media } from '../../components/Media'
+import { Media } from '@/components/Media'
 
 export const MediaBlock: React.FC<
   MediaBlockProps & {
@@ -43,7 +43,7 @@ export const MediaBlock: React.FC<
       )}
     >
       <Media
-        imgClassName={cn('border border-border rounded-[0.8rem]', imgClassName)}
+        imgClassName={cn('border border-border rounded-[0.8rem] shadow-lg shadow-black/10 drop-shadow-2xl', imgClassName)}
         resource={media}
         src={staticImage}
       />

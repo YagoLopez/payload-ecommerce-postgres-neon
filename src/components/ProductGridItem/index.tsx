@@ -33,16 +33,14 @@ export const ProductGridItem: React.FC<Props> = ({ product }) => {
 
   return (
     <Link 
-      className="relative inline-block h-full w-full group" 
+      className="relative inline-block h-full w-full group shadow-md hover:shadow-xl hover:shadow-black/20 transition-all duration-500 ease-out ring-1 ring-border group-hover:ring-accent/50 bg-primary-foreground rounded-lg transform hover:-translate-y-1 hover:scale-[1.02]"
       href={`/products/${product.slug}`}
     >
-      <div className="relative transition-all duration-300 ease-out group-hover:-translate-y-2">
+      <div className="relative transition-all duration-300 ease-out">
         {image ? (
           <Media
             className={clsx(
-              'relative aspect-square object-cover border rounded-2xl p-8 bg-primary-foreground',
-              'shadow-lg group-hover:shadow-2xl transition-shadow duration-300',
-              'ring-1 ring-border group-hover:ring-accent/50'
+              'relative aspect-square object-cover rounded-2xl p-8'
             )}
             height={80}
             imgClassName={clsx(
@@ -54,13 +52,13 @@ export const ProductGridItem: React.FC<Props> = ({ product }) => {
           />
         ) : null}
 
-        <div className="font-mono text-primary/50 group-hover:text-primary transition-colors duration-300 flex justify-between items-center mt-4">
-          <div className="font-medium group-hover:translate-x-1 transition-transform duration-300">
+        <div className="font-mono text-primary/50 group-hover:text-primary flex justify-between items-center border-t bg-gray-100">
+          <div className="font-medium group-hover:translate-x-1 transition-transform duration-300 p-4">
             {title}
           </div>
 
           {typeof price === 'number' && (
-            <div className="font-semibold text-primary/60 group-hover:bg-gray-100 px-2 rounded-md transition-colors duration-300">
+            <div className="font-semibold text-primary/60 group-hover:bg-gray-200 px-2 mx-2 rounded-md transition-colors duration-300">
               <Price amount={price} />
             </div>
           )}

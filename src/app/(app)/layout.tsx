@@ -9,12 +9,12 @@ import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
-import NextTopLoader from 'nextjs-toploader';
+import NextTopLoader from 'nextjs-toploader'
 import React from 'react'
 import './globals.css'
 import { Metadata } from 'next'
 
-const SITE_NAME = 'NextJS Ecommerce 🛒 Customized By Yago López 🛍️'
+const SITE_NAME = '🛒 NextJS Ecommerce. Customized By Yago López'
 const { TWITTER_CREATOR, TWITTER_SITE } = process.env
 const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
   ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
@@ -53,14 +53,14 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <InitTheme />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+        <title>Payload Ecommerce Custom Template - By Yago López</title>
       </head>
       <body>
         <Providers>
-          <AdminBar />
+          <NextTopLoader />
           <LivePreviewListener />
-
+          <AdminBar />
           <Header />
-          <NextTopLoader color={"#9ACDDF"} />
           <main>{children}</main>
           <Footer />
         </Providers>

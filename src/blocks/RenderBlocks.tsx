@@ -9,7 +9,7 @@ import { ThreeItemGridBlock } from '@/blocks/ThreeItemGrid/Component'
 import { toKebabCase } from '@/utilities/toKebabCase'
 import React, { Fragment } from 'react'
 
-import type { Page } from '../payload-types'
+import type { Page } from '@/payload-types'
 
 const blockComponents = {
   archive: ArchiveBlock,
