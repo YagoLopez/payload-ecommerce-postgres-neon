@@ -11,7 +11,7 @@ import { Page, Product } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 import { ProductsCollection } from '@/collections/Products'
 import { adminOnly } from '@/access/adminOnly'
-import { adminOrReadOnly } from '@/access/adminOrReadOnly'
+import { publicAccess } from '@/access/publicAccess'
 
 const generateTitle: GenerateTitle<Product | Page> = ({ doc }) => {
   return doc?.title ? `${doc.title} | Payload Ecommerce Template` : 'Payload Ecommerce Template'
@@ -37,7 +37,7 @@ export const plugins: Plugin[] = [
         group: 'Content',
       },
       access: {
-        read: adminOrReadOnly,
+        read: publicAccess,
         create: adminOnly,
         update: adminOnly,
         delete: adminOnly,
@@ -48,7 +48,7 @@ export const plugins: Plugin[] = [
         group: 'Content',
       },
       access: {
-        read: adminOrReadOnly,
+        read: publicAccess,
         create: adminOnly,
         update: adminOnly,
         delete: adminOnly,
