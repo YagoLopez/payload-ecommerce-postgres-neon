@@ -27,7 +27,6 @@ These utilities allow read-only users to access collections for reading purposes
 
 **File:** `src/collections/Pages/index.ts`
 - Updated to use `adminOrReadOnly` for update operations
-- This allows read-only users to edit content while maintaining security for create/delete operations
 
 ### 4. Admin Bar Update
 
