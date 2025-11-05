@@ -20,7 +20,7 @@ export const BeforeLogin: React.FC = () => {
         store.
       </p>
       <div style={styles}>
-        <p>You can login as a guest using the following credentials:</p>
+        <p style={{color: 'navy', fontWeight: 'bold'}}>You can login as a guest using the following credentials:</p>
         <p>➡️ <b>Email:</b> readonly@readonly.com</p>
         <p>➡️ <b>Password:</b> readonly</p>
       </div>
