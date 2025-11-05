@@ -28,7 +28,10 @@ import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const serverURL = process.env.SERVER_URL || 'http://localhost:3000'
+
 export default buildConfig({
+  serverURL,
   admin: {
     components: {
       // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
@@ -40,6 +43,8 @@ export default buildConfig({
     },
     user: Users.slug,
   },
+  cors: [serverURL, ...(process.env.VERCEL_URL ? [process.env.VERCEL_URL] : [])],
+  csrf: [serverURL, ...(process.env.VERCEL_URL ? [process.env.VERCEL_URL] : [])],
   collections: [Users, Pages, Categories, Media],
   db: postgresAdapter({
     pool: {
