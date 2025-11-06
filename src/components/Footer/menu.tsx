@@ -12,7 +12,7 @@ export function FooterMenu({ menu }: Props) {
 
   return (
     <nav>
-      <ul className="flex flex-wrap items-center gap-x-8 gap-y-4">
+      <ul className="md:flex flex-wrap items-center gap-x-8 gap-y-4">
         {menu.map((item) => {
           return (
             <li key={item.id}>

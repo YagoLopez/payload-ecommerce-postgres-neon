@@ -105,5 +105,6 @@ export default buildConfig({
     disablePlaygroundInProduction: false,
     disableIntrospectionInProduction: false,
   },
-  telemetry: false
+  telemetry: false,
+  debug: false,
 })
