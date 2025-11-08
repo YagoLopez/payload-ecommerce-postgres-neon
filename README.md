@@ -6,6 +6,9 @@ This repo includes a fully-working backend, enterprise-grade admin panel, and a 
 This fork impoves the frontend Ecommerce user interface and the architecture of the code using the Repository Pattern to
 model and abstract the domain entities like, Pages and Products.
 
+## Demo:
+https://payload-ecommerce-postgres-neon.vercel.app/
+
 Core features:
 
 - [Pre-configured Payload Config](#how-it-works)

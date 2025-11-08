@@ -1,12 +1,14 @@
 'use client'
 
 import React from 'react'
-import { useAddresses } from '@payloadcms/plugin-ecommerce/client/react'
+import { Address } from '@/payload-types'
 import { AddressItem } from '@/components/addresses/AddressItem'
 
-export const AddressListing: React.FC = () => {
-  const { addresses } = useAddresses()
+interface AddressListingProps {
+  addresses: Address[] | null
+}
 
+export const AddressListing: React.FC<AddressListingProps> = ({ addresses }) => {
   if (!addresses || addresses.length === 0) {
     return <p>No addresses found.</p>
   }

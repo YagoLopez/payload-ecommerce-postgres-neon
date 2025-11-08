@@ -2,7 +2,7 @@ import type { Footer } from '@/payload-types'
 
 import { FooterMenu } from '@/components/Footer/menu'
 import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
-import { getCachedGlobal } from '@/utilities/getGlobals'
+import { getGlobal } from '@/utilities/getGlobals'
 import Link from 'next/link'
 import React, { Suspense } from 'react'
 import { LogoIcon } from '@/components/icons/logo'
@@ -10,7 +10,7 @@ import { LogoIcon } from '@/components/icons/logo'
 const { COMPANY_NAME, SITE_NAME } = process.env
 
 export async function Footer() {
-  const footer: Footer = await getCachedGlobal('footer', 1)()
+  const footer: Footer = await getGlobal('footer', 1)
   const menu = footer.navItems || []
   const currentYear = new Date().getFullYear()
   const copyrightDate = 2023 + (currentYear > 2023 ? `-${currentYear}` : '')

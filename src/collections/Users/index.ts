@@ -7,19 +7,18 @@ import { checkRole } from '@/access/utilities'
 
 import { ensureFirstUserIsAdmin } from './hooks/ensureFirstUserIsAdmin'
 import { adminOrReadOnly } from '@/access/adminOrReadOnly'
-import { publicAccess } from '@/access/publicAccess'
 
 export const Users: CollectionConfig = {
   slug: 'users',
   access: {
     admin: ({ req: { user } }) => checkRole(['admin', 'read-only'], user),
-    create: publicAccess,
+    create: adminOnly,
     delete: adminOnly,
     read: adminOrReadOnly,
     update: adminOrSelf,
   },
   admin: {
-    group: 'Users',
+    group: 'Registered Users',
     defaultColumns: ['name', 'email', 'roles'],
     useAsTitle: 'name',
   },

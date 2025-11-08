@@ -12,11 +12,11 @@ export function FooterMenu({ menu }: Props) {
 
   return (
     <nav>
-      <ul>
+      <ul className="md:flex flex-wrap items-center gap-x-8 gap-y-4">
         {menu.map((item) => {
           return (
             <li key={item.id}>
-              <CMSLink appearance="link" {...item.link} />
+              <CMSLink appearance="link" {...item.link} className="text-lg" />
             </li>
           )
         })}

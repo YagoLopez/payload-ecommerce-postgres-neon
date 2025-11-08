@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { headers as getHeaders } from 'next/headers.js'
 import configPromise from '@payload-config'
-import { Order } from '@/payload-types'
+import { Address } from '@/payload-types'
 import { getPayload } from 'payload'
 import { redirect } from 'next/navigation'
 import { AddressListing } from '@/components/addresses/AddressListing'
@@ -14,7 +14,7 @@ export default async function AddressesPage() {
   const payload = await getPayload({ config: configPromise })
   const { user } = await payload.auth({ headers })
 
-  let orders: Order[] | null = null
+  let addresses: Address[] | null = null
 
   if (!user) {
     redirect(
@@ -23,11 +23,10 @@ export default async function AddressesPage() {
   }
 
   try {
-    const ordersResult = await payload.find({
-      collection: 'orders',
+    const addressesResult = await payload.find({
+      collection: 'addresses',
       limit: 5,
-      user,
-      overrideAccess: false,
+      overrideAccess: true,
       pagination: false,
       where: {
         customer: {
@@ -36,12 +35,12 @@ export default async function AddressesPage() {
       },
     })
 
-    orders = ordersResult?.docs || []
+    addresses = addressesResult?.docs || []
   } catch (error) {
     // when deploying this template on Payload Cloud, this page needs to build before the APIs are live
     // so swallow the error here and simply render the page with fallback data where necessary
     // in production you may want to redirect to a 404  page or at least log the error somewhere
-    // console.error(error)
+    console.error('Error fetching addresses:', error)
   }
 
   return (
@@ -50,7 +49,7 @@ export default async function AddressesPage() {
         <h1 className="text-3xl font-medium mb-8">Addresses</h1>
 
         <div className="mb-8">
-          <AddressListing />
+          <AddressListing addresses={addresses} />
         </div>
 
         <CreateAddressModal />
