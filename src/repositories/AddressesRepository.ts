@@ -4,7 +4,21 @@ import { getPayload } from 'payload'
 const payload = await getPayload({ config: configPromise })
 
 export class AddressesRepository {
-  static async getByCustomer({ customerId }: { customerId: number | string }) {
+  static async getByCustomer({ customerId }: { customerId?: number | string }) {
+    if (!customerId) {
+      return {
+        docs: [],
+        totalDocs: 0,
+        limit: 0,
+        totalPages: 1,
+        page: 1,
+        hasPrevPage: false,
+        hasNextPage: false,
+        prevPage: null,
+        nextPage: null,
+      }
+    }
+
     return await payload.find({
       collection: 'addresses',
       draft: false,
@@ -24,10 +38,9 @@ export class AddressesRepository {
         updatedAt: true,
         createdAt: true,
       },
-      sort: 'createdAt',
+      sort: '-createdAt',
       where: {
-        customer: { equals: typeof customerId === 'string' ? parseInt(customerId) : customerId },
+        customer: { equals: typeof customerId === 'string' ? parseInt(customerId, 10) : customerId },
       },
     })
-  }
-}
+  }}

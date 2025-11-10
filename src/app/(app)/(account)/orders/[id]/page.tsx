@@ -9,11 +9,11 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ChevronLeftIcon } from 'lucide-react'
 import { ProductItem } from '@/components/ProductItem'
-import { headers as getHeaders } from 'next/headers.js'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { OrderStatus } from '@/components/OrderStatus'
 import { AddressItem } from '@/components/addresses/AddressItem'
+import { UsersRepository } from '@/repositories/UsersRepository'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,9 +23,8 @@ type PageProps = {
 }
 
 export default async function Order({ params, searchParams }: PageProps) {
-  const headers = await getHeaders()
   const payload = await getPayload({ config: configPromise })
-  const { user } = await payload.auth({ headers })
+  const user = await UsersRepository.getCurrentUser()
 
   const { id } = await params
   const { email = '' } = await searchParams

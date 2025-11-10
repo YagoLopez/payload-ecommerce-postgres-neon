@@ -6,14 +6,10 @@ import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { CheckoutPage } from '@/components/checkout/CheckoutPage'
 import { AddressesRepository } from '@/repositories/AddressesRepository'
 import { Fragment } from 'react'
-import { headers as getHeaders } from 'next/dist/server/request/headers'
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
+import { UsersRepository } from '@/repositories/UsersRepository'
 
 export default async function Checkout() {
-  const headers = await getHeaders()
-  const payload = await getPayload({ config: configPromise })
-  const { user } = await payload.auth({ headers })
+const user = await UsersRepository.getCurrentUser()
 
   if (!user?.id) {
     return (
@@ -29,7 +25,6 @@ export default async function Checkout() {
   }
 
   const addressesResponse = await AddressesRepository.getByCustomer({ customerId: user.id })
-  // Extract the first address as initial address, or undefined if none exist
   const initialAddress = addressesResponse?.docs?.[0]
 
   return (

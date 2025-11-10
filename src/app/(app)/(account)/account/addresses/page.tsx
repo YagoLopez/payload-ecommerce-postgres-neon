@@ -1,20 +1,17 @@
 import type { Metadata } from 'next'
 
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
-import { headers as getHeaders } from 'next/headers.js'
-import configPromise from '@payload-config'
 import { Address } from '@/payload-types'
-import { getPayload } from 'payload'
 import { redirect } from 'next/navigation'
 import { AddressListing } from '@/components/addresses/AddressListing'
 import { CreateAddressModal } from '@/components/addresses/CreateAddressModal'
 import { AddressesRepository } from '@/repositories/AddressesRepository'
+import { UsersRepository } from '@/repositories/UsersRepository'
 
 export default async function AddressesPage() {
   // todo: extract this repeated logic to users repository
-  const headers = await getHeaders()
-  const payload = await getPayload({ config: configPromise })
-  const { user } = await payload.auth({ headers })
+  const user = await UsersRepository.getCurrentUser()
+
 
   let addresses: Address[] | null = null
 
