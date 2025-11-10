@@ -29,7 +29,11 @@ import { LoadingSpinner } from '@/components/LoadingSpinner'
 const apiKey = `${process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}`
 const stripe = loadStripe(apiKey)
 
-export const CheckoutPage: React.FC = () => {
+interface CheckoutPageProps {
+  initialAddress?: Address
+}
+
+export const CheckoutPage: React.FC<CheckoutPageProps> = ({ initialAddress }) => {
   const { user } = useAuth()
   const router = useRouter()
   const { cart } = useCart()
@@ -44,7 +48,8 @@ export const CheckoutPage: React.FC = () => {
   const { initiatePayment } = usePayments()
   const { addresses } = useAddresses()
   const [shippingAddress, setShippingAddress] = useState<Partial<Address>>()
-  const [billingAddress, setBillingAddress] = useState<Partial<Address>>()
+  const [billingAddress, setBillingAddress] = useState<Partial<Address> | undefined>(initialAddress)
+
   const [billingAddressSameAsShipping, setBillingAddressSameAsShipping] = useState(true)
   const [isProcessingPayment, setProcessingPayment] = useState(false)
 
@@ -57,14 +62,18 @@ export const CheckoutPage: React.FC = () => {
   // On initial load wait for addresses to be loaded and check to see if we can prefill a default one
   useEffect(() => {
     if (!shippingAddress) {
-      if (addresses && addresses.length > 0) {
+      // Use initialAddress prop first if provided
+      if (initialAddress) {
+        setBillingAddress(initialAddress)
+      } else if (addresses && addresses.length > 0) {
+        // Fall back to first address from hook
         const defaultAddress = addresses[0]
         if (defaultAddress) {
           setBillingAddress(defaultAddress)
         }
       }
     }
-  }, [addresses])
+  }, [addresses, initialAddress])
 
   useEffect(() => {
     return () => {
@@ -299,7 +308,8 @@ export const CheckoutPage: React.FC = () => {
         )}
 
         <Suspense fallback={<React.Fragment />}>
-          {/* @ts-ignore */}
+          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+          {/* @ts-expect-error */}
           {paymentData && paymentData?.['clientSecret'] && (
             <div className="pb-16">
               <h2 className="font-medium text-3xl">Payment</h2>

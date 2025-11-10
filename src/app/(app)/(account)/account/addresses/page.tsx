@@ -8,6 +8,7 @@ import { getPayload } from 'payload'
 import { redirect } from 'next/navigation'
 import { AddressListing } from '@/components/addresses/AddressListing'
 import { CreateAddressModal } from '@/components/addresses/CreateAddressModal'
+import { AddressesRepository } from '@/repositories/AddressesRepository'
 
 export default async function AddressesPage() {
   const headers = await getHeaders()
@@ -23,18 +24,7 @@ export default async function AddressesPage() {
   }
 
   try {
-    const addressesResult = await payload.find({
-      collection: 'addresses',
-      limit: 5,
-      overrideAccess: true,
-      pagination: false,
-      where: {
-        customer: {
-          equals: user?.id,
-        },
-      },
-    })
-
+    const addressesResult = await AddressesRepository.getByCustomer({ customerId: user?.id })
     addresses = addressesResult?.docs || []
   } catch (error) {
     // when deploying this template on Payload Cloud, this page needs to build before the APIs are live

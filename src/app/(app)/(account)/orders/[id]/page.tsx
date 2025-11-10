@@ -33,6 +33,7 @@ export default async function Order({ params, searchParams }: PageProps) {
   let order: Order | null = null
 
   try {
+    // todo: create orders repository
     const {
       docs: [orderResult],
     } = await payload.find({

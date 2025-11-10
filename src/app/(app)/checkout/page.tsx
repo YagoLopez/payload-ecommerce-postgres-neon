@@ -1,11 +1,38 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
-import React, { Fragment } from 'react'
 
 import { CheckoutPage } from '@/components/checkout/CheckoutPage'
+import { AddressesRepository } from '@/repositories/AddressesRepository'
+import { Fragment } from 'react'
+import { headers as getHeaders } from 'next/dist/server/request/headers'
+import { getPayload } from 'payload'
+import configPromise from '@payload-config'
 
-export default function Checkout() {
+export default async function Checkout() {
+  const headers = await getHeaders()
+  const payload = await getPayload({ config: configPromise })
+  const { user } = await payload.auth({ headers })
+
+  if (!user?.id) {
+    return (
+      <div className="container min-h-[90vh] flex items-center justify-center">
+        <div className="text-center">
+          <p className="mb-4">You must be logged in to access checkout.</p>
+          <Link href="/login" className="underline">
+            Login here
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  const addressesResponse = await AddressesRepository.getByCustomer({ customerId: user.id })
+  // Extract the first address as initial address, or undefined if none exist
+  const initialAddress = addressesResponse?.docs?.[0]
+  console.log('initialAddress', initialAddress)
+
   return (
     <div className="container min-h-[90vh] flex">
       {!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY && (
@@ -34,7 +61,7 @@ export default function Checkout() {
 
       <h1 className="sr-only">Checkout</h1>
 
-      <CheckoutPage />
+      <CheckoutPage initialAddress={initialAddress} />
     </div>
   )
 }

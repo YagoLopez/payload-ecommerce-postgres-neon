@@ -25,6 +25,7 @@ export default async function AccountPage() {
   }
 
   try {
+    // todo: create orders repository
     const ordersResult = await payload.find({
       collection: 'orders',
       limit: 5,
@@ -69,7 +70,7 @@ export default async function AccountPage() {
 
         {orders && orders.length > 0 && (
           <ul className="flex flex-col gap-6 mb-8">
-            {orders?.map((order, index) => (
+            {orders?.map((order) => (
               <li key={order.id}>
                 <OrderItem order={order} />
               </li>
