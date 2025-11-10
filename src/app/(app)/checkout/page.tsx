@@ -31,7 +31,6 @@ export default async function Checkout() {
   const addressesResponse = await AddressesRepository.getByCustomer({ customerId: user.id })
   // Extract the first address as initial address, or undefined if none exist
   const initialAddress = addressesResponse?.docs?.[0]
-  console.log('initialAddress', initialAddress)
 
   return (
     <div className="container min-h-[90vh] flex">

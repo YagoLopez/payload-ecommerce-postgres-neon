@@ -11,6 +11,7 @@ import { CreateAddressModal } from '@/components/addresses/CreateAddressModal'
 import { AddressesRepository } from '@/repositories/AddressesRepository'
 
 export default async function AddressesPage() {
+  // todo: extract this repeated logic to users repository
   const headers = await getHeaders()
   const payload = await getPayload({ config: configPromise })
   const { user } = await payload.auth({ headers })
