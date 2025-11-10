@@ -61,7 +61,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ initialAddress }) =>
 
   // On initial load wait for addresses to be loaded and check to see if we can prefill a default one
   useEffect(() => {
-    if (!shippingAddress) {
+    if (!billingAddress) {
       // Use initialAddress prop first if provided
       if (initialAddress) {
         setBillingAddress(initialAddress)
@@ -73,7 +73,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ initialAddress }) =>
         }
       }
     }
-  }, [addresses, initialAddress])
+  }, [addresses, initialAddress, billingAddress])
 
   useEffect(() => {
     return () => {
