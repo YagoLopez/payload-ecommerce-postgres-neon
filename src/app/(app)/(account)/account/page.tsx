@@ -3,18 +3,18 @@ import type { Metadata } from 'next'
 import { Button } from '@/components/ui/button'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import Link from 'next/link'
-import { headers as getHeaders } from 'next/headers.js'
 import configPromise from '@payload-config'
 import { AccountForm } from '@/components/forms/AccountForm'
 import { Order } from '@/payload-types'
 import { OrderItem } from '@/components/OrderItem'
 import { getPayload } from 'payload'
 import { redirect } from 'next/navigation'
+import { UsersRepository } from '@/repositories/UsersRepository'
 
 export default async function AccountPage() {
-  const headers = await getHeaders()
   const payload = await getPayload({ config: configPromise })
-  const { user } = await payload.auth({ headers })
+  const user = await UsersRepository.getCurrentUser()
+
 
   let orders: Order[] | null = null
 
@@ -25,6 +25,7 @@ export default async function AccountPage() {
   }
 
   try {
+    // todo: create orders repository
     const ordersResult = await payload.find({
       collection: 'orders',
       limit: 5,
@@ -69,7 +70,7 @@ export default async function AccountPage() {
 
         {orders && orders.length > 0 && (
           <ul className="flex flex-col gap-6 mb-8">
-            {orders?.map((order, index) => (
+            {orders?.map((order) => (
               <li key={order.id}>
                 <OrderItem order={order} />
               </li>

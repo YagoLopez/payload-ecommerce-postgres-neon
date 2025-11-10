@@ -1,18 +1,17 @@
 import type { Metadata } from 'next'
 
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
-import { headers as getHeaders } from 'next/headers.js'
-import configPromise from '@payload-config'
 import { Address } from '@/payload-types'
-import { getPayload } from 'payload'
 import { redirect } from 'next/navigation'
 import { AddressListing } from '@/components/addresses/AddressListing'
 import { CreateAddressModal } from '@/components/addresses/CreateAddressModal'
+import { AddressesRepository } from '@/repositories/AddressesRepository'
+import { UsersRepository } from '@/repositories/UsersRepository'
 
 export default async function AddressesPage() {
-  const headers = await getHeaders()
-  const payload = await getPayload({ config: configPromise })
-  const { user } = await payload.auth({ headers })
+  // todo: extract this repeated logic to users repository
+  const user = await UsersRepository.getCurrentUser()
+
 
   let addresses: Address[] | null = null
 
@@ -23,18 +22,7 @@ export default async function AddressesPage() {
   }
 
   try {
-    const addressesResult = await payload.find({
-      collection: 'addresses',
-      limit: 5,
-      overrideAccess: true,
-      pagination: false,
-      where: {
-        customer: {
-          equals: user?.id,
-        },
-      },
-    })
-
+    const addressesResult = await AddressesRepository.getByCustomer({ customerId: user?.id })
     addresses = addressesResult?.docs || []
   } catch (error) {
     // when deploying this template on Payload Cloud, this page needs to build before the APIs are live

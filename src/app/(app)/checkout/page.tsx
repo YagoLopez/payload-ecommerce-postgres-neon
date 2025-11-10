@@ -1,11 +1,32 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
-import React, { Fragment } from 'react'
 
 import { CheckoutPage } from '@/components/checkout/CheckoutPage'
+import { AddressesRepository } from '@/repositories/AddressesRepository'
+import { Fragment } from 'react'
+import { UsersRepository } from '@/repositories/UsersRepository'
 
-export default function Checkout() {
+export default async function Checkout() {
+const user = await UsersRepository.getCurrentUser()
+
+  if (!user?.id) {
+    return (
+      <div className="container min-h-[90vh] flex items-center justify-center">
+        <div className="text-center">
+          <p className="mb-4">You must be logged in to access checkout.</p>
+          <Link href="/login" className="underline">
+            Login here
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  const addressesResponse = await AddressesRepository.getByCustomer({ customerId: user.id })
+  const initialAddress = addressesResponse?.docs?.[0]
+
   return (
     <div className="container min-h-[90vh] flex">
       {!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY && (
@@ -34,7 +55,7 @@ export default function Checkout() {
 
       <h1 className="sr-only">Checkout</h1>
 
-      <CheckoutPage />
+      <CheckoutPage initialAddress={initialAddress} />
     </div>
   )
 }

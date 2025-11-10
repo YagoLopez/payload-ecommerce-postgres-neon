@@ -9,11 +9,11 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ChevronLeftIcon } from 'lucide-react'
 import { ProductItem } from '@/components/ProductItem'
-import { headers as getHeaders } from 'next/headers.js'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { OrderStatus } from '@/components/OrderStatus'
 import { AddressItem } from '@/components/addresses/AddressItem'
+import { UsersRepository } from '@/repositories/UsersRepository'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,9 +23,8 @@ type PageProps = {
 }
 
 export default async function Order({ params, searchParams }: PageProps) {
-  const headers = await getHeaders()
   const payload = await getPayload({ config: configPromise })
-  const { user } = await payload.auth({ headers })
+  const user = await UsersRepository.getCurrentUser()
 
   const { id } = await params
   const { email = '' } = await searchParams
@@ -33,6 +32,7 @@ export default async function Order({ params, searchParams }: PageProps) {
   let order: Order | null = null
 
   try {
+    // todo: create orders repository
     const {
       docs: [orderResult],
     } = await payload.find({
@@ -155,9 +155,6 @@ export default async function Order({ params, searchParams }: PageProps) {
             <h2 className="font-mono text-primary/50 mb-4 uppercase text-sm">Items</h2>
             <ul className="flex flex-col gap-6">
               {order.items?.map((item, index) => {
-                if (typeof item.product === 'string') {
-                  return null
-                }
 
                 if (!item.product || typeof item.product !== 'object') {
                   return <div key={index}>This item is no longer available.</div>
