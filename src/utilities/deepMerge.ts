@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
 /**
@@ -12,7 +13,7 @@ export function isObject(item: unknown): boolean {
 /**
  * Deep merge two objects.
  * @param target
- * @param ...sources
+ * @param source
  */
 export function deepMerge<T, R>(target: T, source: R): T {
   const output = { ...target }

@@ -3,48 +3,22 @@ import type { Metadata } from 'next'
 import { Button } from '@/components/ui/button'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import Link from 'next/link'
-import configPromise from '@payload-config'
 import { AccountForm } from '@/components/forms/AccountForm'
 import { Order } from '@/payload-types'
 import { OrderItem } from '@/components/OrderItem'
-import { getPayload } from 'payload'
-import { redirect } from 'next/navigation'
 import { UsersRepository } from '@/repositories/UsersRepository'
+import { OrdersRepository } from '@/repositories/OrdersRepository'
+import { redirectIfUserNotLoggedIn } from '@/utilities/redirectIfUserNotLoggedIn'
 
 export default async function AccountPage() {
-  const payload = await getPayload({ config: configPromise })
   const user = await UsersRepository.getCurrentUser()
-
-
+  redirectIfUserNotLoggedIn(user)
   let orders: Order[] | null = null
 
-  if (!user) {
-    redirect(
-      `/login?warning=${encodeURIComponent('Please login to access your account settings.')}`,
-    )
-  }
-
   try {
-    // todo: create orders repository
-    const ordersResult = await payload.find({
-      collection: 'orders',
-      limit: 5,
-      user,
-      overrideAccess: false,
-      pagination: false,
-      where: {
-        customer: {
-          equals: user?.id,
-        },
-      },
-    })
-
-    orders = ordersResult?.docs || []
+    orders = await OrdersRepository.getUserOrders(user)
   } catch (error) {
-    // when deploying this template on Payload Cloud, this page needs to build before the APIs are live
-    // so swallow the error here and simply render the page with fallback data where necessary
-    // in production you may want to redirect to a 404  page or at least log the error somewhere
-    // console.error(error)
+    console.error(error)
   }
 
   return (
