@@ -10,6 +10,7 @@ import { useAuth } from '@/providers/Auth'
 import { useTheme } from '@/providers/Theme'
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
+import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { Suspense, useCallback, useEffect, useState } from 'react'
@@ -52,6 +53,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ initialAddress }) =>
 
   const [billingAddressSameAsShipping, setBillingAddressSameAsShipping] = useState(true)
   const [isProcessingPayment, setProcessingPayment] = useState(false)
+  const [isLoadingPayment, setLoadingPayment] = useState(false)
 
   const cartIsEmpty = !cart || !cart.items || !cart.items.length
 
@@ -281,13 +283,26 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ initialAddress }) =>
         {!paymentData && (
           <Button
             className="self-start"
-            disabled={!canGoToPayment}
+            disabled={!canGoToPayment || isLoadingPayment}
             onClick={(e) => {
               e.preventDefault()
-              void initiatePaymentIntent('stripe')
+              setLoadingPayment(true)
+              initiatePaymentIntent('stripe').finally(() => {
+                setLoadingPayment(false)
+              })
             }}
           >
-            Go to payment
+            {isLoadingPayment ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              <>
+                Go to payment
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </>
+            )}
           </Button>
         )}
 
@@ -307,12 +322,20 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ initialAddress }) =>
           </div>
         )}
 
-        <Suspense fallback={<React.Fragment />}>
+        <Suspense fallback={"Loading..."}>
           {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
           {/* @ts-expect-error */}
           {paymentData && paymentData?.['clientSecret'] && (
             <div className="pb-16">
               <h2 className="font-medium text-3xl">Payment</h2>
+              <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 shadow-md my-4">
+                <section className="text-blue-800 dark:text-blue-200 text-sm p-2">
+                  <strong className="p-2">Use the following test card information:</strong>
+                  <p>- Credit card number: 4242 4242 4242 4242</p>
+                  <p>- Expiration date: 12/34</p>
+                  <p>- CVC Security Number: 123</p>
+                </section>
+              </div>
               {error && <p>{`Error: ${error}`}</p>}
               <Elements
                 options={{
@@ -348,10 +371,11 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ initialAddress }) =>
                     setProcessingPayment={setProcessingPayment}
                   />
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     className="self-start"
                     onClick={() => setPaymentData(null)}
                   >
+                    <ArrowLeft className="h-4 w-4" />
                     Cancel payment
                   </Button>
                 </div>
