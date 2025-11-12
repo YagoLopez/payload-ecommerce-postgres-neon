@@ -4,37 +4,20 @@ import type { Metadata } from 'next'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 
 import { OrderItem } from '@/components/OrderItem'
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
-import { redirect } from 'next/navigation'
 import { UsersRepository } from '@/repositories/UsersRepository'
+import { OrdersRepository } from '@/repositories/OrdersRepository'
+import { redirectIfUserNotLoggedIn } from '@/utilities/redirectIfUserNotLoggedIn'
 
 export default async function Orders() {
-  const payload = await getPayload({ config: configPromise })
   const user = await UsersRepository.getCurrentUser()
-
-  let orders: Order[] | null = null
-
-  if (!user) {
-    redirect(`/login?warning=${encodeURIComponent('Please login to access your orders.')}`)
-  }
+  redirectIfUserNotLoggedIn(user)
+  let orders: Order[] = []
 
   try {
-    const ordersResult = await payload.find({
-      collection: 'orders',
-      limit: 0,
-      pagination: false,
-      user,
-      overrideAccess: false,
-      where: {
-        customer: {
-          equals: user?.id,
-        },
-      },
-    })
-
-    orders = ordersResult?.docs || []
-  } catch (error) {}
+    orders = await OrdersRepository.getUserOrders(user)
+  } catch (error) {
+    console.error(error)
+  }
 
   return (
     <>

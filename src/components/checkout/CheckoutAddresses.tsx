@@ -32,7 +32,7 @@ export const CheckoutAddresses: React.FC<Props> = ({
   if (!addresses || addresses.length === 0) {
     return (
       <div>
-        <p>No addresses found. Please add an address.</p>
+        <p className="mb-6">No addresses found. Please add an address.</p>
 
         <CreateAddressModal />
       </div>

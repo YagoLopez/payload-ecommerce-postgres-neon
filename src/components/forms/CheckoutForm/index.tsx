@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import React, { useCallback, FormEvent } from 'react'
 import { useCart, usePayments } from '@payloadcms/plugin-ecommerce/client/react'
 import { Address } from '@/payload-types'
+import { CreditCard } from 'lucide-react'
 
 type Props = {
   customerEmail?: string
@@ -126,7 +127,14 @@ export const CheckoutForm: React.FC<Props> = ({
       <PaymentElement />
       <div className="mt-8 flex gap-4">
         <Button disabled={!stripe || isLoading} type="submit" variant="default">
-          {isLoading ? 'Loading...' : 'Pay now'}
+          {isLoading ? (
+            'Loading...'
+          ) : (
+            <>
+              <CreditCard className="mr-2 h-4 w-4" />
+              Pay now
+            </>
+          )}
         </Button>
       </div>
     </form>

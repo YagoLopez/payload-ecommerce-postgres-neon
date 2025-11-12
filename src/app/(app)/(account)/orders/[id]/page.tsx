@@ -9,11 +9,11 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ChevronLeftIcon } from 'lucide-react'
 import { ProductItem } from '@/components/ProductItem'
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
 import { OrderStatus } from '@/components/OrderStatus'
 import { AddressItem } from '@/components/addresses/AddressItem'
 import { UsersRepository } from '@/repositories/UsersRepository'
+import { OrdersRepository } from '@/repositories/OrdersRepository'
+import { redirectIfUserNotLoggedIn } from '@/utilities/redirectIfUserNotLoggedIn'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,62 +23,14 @@ type PageProps = {
 }
 
 export default async function Order({ params, searchParams }: PageProps) {
-  const payload = await getPayload({ config: configPromise })
+  const { id: orderId } = await params
   const user = await UsersRepository.getCurrentUser()
-
-  const { id } = await params
   const { email = '' } = await searchParams
-
   let order: Order | null = null
+  redirectIfUserNotLoggedIn(user)
 
   try {
-    // todo: create orders repository
-    const {
-      docs: [orderResult],
-    } = await payload.find({
-      collection: 'orders',
-      user,
-      overrideAccess: !Boolean(user),
-      depth: 2,
-      where: {
-        and: [
-          {
-            id: {
-              equals: id,
-            },
-          },
-          ...(user
-            ? [
-                {
-                  customer: {
-                    equals: user.id,
-                  },
-                },
-              ]
-            : []),
-          ...(email
-            ? [
-                {
-                  customerEmail: {
-                    equals: email,
-                  },
-                },
-              ]
-            : []),
-        ],
-      },
-      select: {
-        amount: true,
-        currency: true,
-        items: true,
-        customerEmail: true,
-        customer: true,
-        status: true,
-        createdAt: true,
-        updatedAt: true,
-        shippingAddress: true,
-      },
-    })
+    const orderResult = await OrdersRepository.getOrderById(user, orderId)
 
     const canAccessAsGuest =
       !user &&
@@ -106,7 +58,7 @@ export default async function Order({ params, searchParams }: PageProps) {
   }
 
   return (
-    <div className="">
+    <div>
       <div className="flex gap-8 justify-between items-center mb-6">
         {user ? (
           <div className="flex gap-4">
@@ -155,7 +107,6 @@ export default async function Order({ params, searchParams }: PageProps) {
             <h2 className="font-mono text-primary/50 mb-4 uppercase text-sm">Items</h2>
             <ul className="flex flex-col gap-6">
               {order.items?.map((item, index) => {
-
                 if (!item.product || typeof item.product !== 'object') {
                   return <div key={index}>This item is no longer available.</div>
                 }

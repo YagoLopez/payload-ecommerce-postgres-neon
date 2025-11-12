@@ -1,6 +1,7 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import React, { useState } from 'react'
+import { MapPin } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -49,7 +50,10 @@ export const CreateAddressModal: React.FC<Props> = ({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild disabled={disabled}>
-        <Button variant={'outline'}>{buttonText}</Button>
+        <Button variant={'outline'}>
+          <MapPin className="h-4 w-4" />
+          {buttonText}
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
