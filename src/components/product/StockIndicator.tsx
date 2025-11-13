@@ -2,6 +2,7 @@
 import { Product, Variant } from '@/payload-types'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
+import { Price } from '@/components/Price'
 
 type Props = {
   product: Product
@@ -39,12 +40,21 @@ export const StockIndicator: React.FC<Props> = ({ product }) => {
     return product.inventory || 0
   }, [product.enableVariants, selectedVariant, product.inventory])
 
+  const variantPrice = useMemo(() => {
+    if (product.enableVariants) {
+      if (selectedVariant && selectedVariant.priceInUSD) {
+        return selectedVariant.priceInUSD
+      }
+    }
+    return undefined
+  }, [product.enableVariants, selectedVariant])
+
   if (product.enableVariants && !selectedVariant) {
     return null
   }
 
   return (
-    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 border border-border">
+    <div className="inline-flex items-center gap-2 px-4 rounded-full bg-muted/50 border border-border">
       <div
         className={`h-2 w-2 rounded-full ${
           stockQuantity > 10
@@ -59,6 +69,16 @@ export const StockIndicator: React.FC<Props> = ({ product }) => {
         {stockQuantity <= 10 && stockQuantity > 0 && `Only ${stockQuantity} left`}
         {(stockQuantity === 0 || !stockQuantity) && 'Out of Stock'}
       </span>
+      {variantPrice && (
+        <>
+          <Price
+            amount={variantPrice}
+            className="text-sm font-medium ml-auto"
+            as="span"
+          />
+        <span className="text-sm">per unit</span>
+        </>
+      )}
     </div>
   )
 }

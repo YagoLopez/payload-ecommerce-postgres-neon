@@ -108,7 +108,7 @@ export default async function ProductPage({ params }: Args) {
     product.relatedProducts?.filter((relatedProduct) => typeof relatedProduct === 'object') ?? []
 
   return (
-    <React.Fragment>
+    <>
       <script
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(productJsonLd),
@@ -148,7 +148,7 @@ export default async function ProductPage({ params }: Args) {
       ) : (
         <></>
       )}
-    </React.Fragment>
+    </>
   )
 }
 

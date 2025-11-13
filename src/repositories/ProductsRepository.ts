@@ -50,7 +50,7 @@ export class ProductsRepository {
     return await payload.find({
       collection: 'products',
       draft: false,
-      overrideAccess: false,
+      overrideAccess: true,
       select: {
         title: true,
         slug: true,

@@ -1,44 +1,73 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { Loader2 } from 'lucide-react'
 import type { Product } from '@/payload-types'
 
 import { createUrl } from '@/utilities/createUrl'
 import clsx from 'clsx'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+
+interface LoadingState {
+  [optionId: string]: boolean
+}
 
 export function VariantSelector({ product }: { product: Product }) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const [loadingStates, setLoadingStates] = useState<LoadingState>({})
+  const [isNavigating, setIsNavigating] = useState(false)
   const variants = product.variants?.docs
   const variantTypes = product.variantTypes
   const hasVariants = Boolean(product.enableVariants && variants?.length && variantTypes?.length)
+
+  useEffect(() => {
+    setIsNavigating(false)
+    setLoadingStates({})
+  }, [searchParams])
 
   if (!hasVariants) {
     return null
   }
 
+  const handleVariantChange = async (optionId: number, optionUrl: string) => {
+    setLoadingStates(prev => ({ ...prev, [optionId]: true }))
+    setIsNavigating(true)
+
+    try {
+      router.replace(optionUrl, {
+        scroll: false,
+      })
+    } catch (error) {
+      console.error('Navigation error:', error)
+      setLoadingStates(prev => ({ ...prev, [optionId]: false }))
+      setIsNavigating(false)
+    }
+  }
+
   return variantTypes?.map((type) => {
     if (!type || typeof type !== 'object') {
-      return <></>
+      return null
     }
 
     const options = type.options?.docs
 
     if (!options || !Array.isArray(options) || !options.length) {
-      return <></>
+      return null
     }
 
     return (
       <dl className="space-y-4" key={type.id}>
-        <dt className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">{type.label}</dt>
+        <dt className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+          {type.label}
+        </dt>
         <dd className="flex flex-wrap gap-3">
-          <React.Fragment>
+          <>
             {options?.map((option) => {
               if (!option || typeof option !== 'object') {
-                return <></>
+                return null
               }
 
               const optionID = option.id
@@ -79,7 +108,7 @@ export function VariantSelector({ product }: { product: Product }) {
                   // If we found a matching variant, set the variant ID in the search params.
                   optionSearchParams.set('variant', String(matchingVariant.id))
 
-                  isAvailableForSale = !!(matchingVariant.inventory && matchingVariant.inventory > 0);
+                  isAvailableForSale = !!(matchingVariant.inventory && matchingVariant.inventory > 0)
                 }
               }
 
@@ -90,32 +119,42 @@ export function VariantSelector({ product }: { product: Product }) {
                 Boolean(isAvailableForSale) &&
                 searchParams.get(optionKeyLowerCase) === String(optionID)
 
+              const isLoading = loadingStates[option.id] || false
+
               return (
                 <Button
                   variant={'outline'}
                   aria-disabled={!isAvailableForSale}
+                  aria-busy={isLoading}
                   className={clsx(
-                    'px-6 py-3 rounded-xl font-medium transition-all duration-300',
+                    'px-6 py-3 rounded-xl font-medium duration-300',
                     'hover:shadow-md hover:-translate-y-0.5',
+                    'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
                     {
-                      'bg-accent text-accent-foreground ring-2 ring-accent shadow-lg scale-105': isActive,
+                      'bg-primary text-primary-foreground ring-1 ring-primary ring-offset-1 shadow-lg font-bold hover:bg-primary/90': isActive,
                       'opacity-50 cursor-not-allowed': !isAvailableForSale,
+                      'opacity-75': isLoading,
                     }
                   )}
-                  disabled={!isAvailableForSale}
+                  disabled={!isAvailableForSale || isLoading}
                   key={option.id}
                   onClick={() => {
-                    router.replace(`${optionUrl}`, {
-                      scroll: false,
-                    })
+                    if (isLoading || !isAvailableForSale || isNavigating) return
+                    handleVariantChange(option.id, optionUrl).then()
                   }}
-                  title={`${option.label} ${!isAvailableForSale ? ' (Out of Stock)' : ''}`}
+                  title={`${option.label} ${!isAvailableForSale ? ' (Out of Stock)' : ''}${isLoading ? ' Loading' : ''}`}
                 >
-                  {option.label}
+                  {isLoading ? (
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="mx-4 h-4 w-4 animate-spin" />
+                    </div>
+                  ) : (
+                    option.label
+                  )}
                 </Button>
               )
             })}
-          </React.Fragment>
+          </>
         </dd>
       </dl>
     )
