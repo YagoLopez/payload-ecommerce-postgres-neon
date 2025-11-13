@@ -21,35 +21,57 @@ export function ProductDescription({ product }: { product: Product }) {
   if (hasVariants) {
     const priceField = `priceIn${currency.code}` as keyof Variant
 
-    const variantsOrderedByPrice = product.variants?.docs
-      ?.filter((variant) => variant && typeof variant === 'object')
-      .sort((a, b) => {
-        if (
-          typeof a === 'object' &&
-          typeof b === 'object' &&
-          priceField in a &&
-          priceField in b &&
-          typeof a[priceField] === 'number' &&
-          typeof b[priceField] === 'number'
-        ) {
-          return a[priceField] - b[priceField]
+    // Filter variants that have valid price data
+    const variantsWithPrices = product.variants?.docs
+      ?.filter((variant) => {
+        if (!variant || typeof variant !== 'object') return false
+        
+        // Check if the price field exists and is a valid number
+        if (priceField in variant && typeof variant[priceField] === 'number' && variant[priceField] > 0) {
+          return true
         }
+        
+        // Fallback to USD price field if the dynamic currency field doesn't exist
+        return currency.code !== 'USD' && typeof variant.priceInUSD === 'number' && variant.priceInUSD > 0;
+        
 
-        return 0
-      }) as Variant[]
+      }) as Variant[] || []
 
-    const lowestVariant = variantsOrderedByPrice?.[0][priceField]
-    const highestVariant = variantsOrderedByPrice?.[variantsOrderedByPrice.length - 1][priceField]
-    if (
-      variantsOrderedByPrice &&
-      typeof lowestVariant === 'number' &&
-      typeof highestVariant === 'number'
-    ) {
-      lowestAmount = lowestVariant
-      highestAmount = highestVariant
+    if (variantsWithPrices.length > 0) {
+      // Sort variants by price
+      const variantsOrderedByPrice = variantsWithPrices
+        .sort((a, b) => {
+          const priceA = priceField in a ? a[priceField] : a.priceInUSD
+          const priceB = priceField in b ? b[priceField] : b.priceInUSD
+          
+          if (typeof priceA === 'number' && typeof priceB === 'number') {
+            return priceA - priceB
+          }
+          
+          return 0
+        }) as Variant[]
+
+      const lowestVariant = variantsOrderedByPrice[0]
+      const highestVariant = variantsOrderedByPrice[variantsOrderedByPrice.length - 1]
+      
+      const lowestPrice = priceField in lowestVariant ? lowestVariant[priceField] : lowestVariant.priceInUSD
+      const highestPrice = priceField in highestVariant ? highestVariant[priceField] : highestVariant.priceInUSD
+
+      if (
+        typeof lowestPrice === 'number' &&
+        typeof highestPrice === 'number' &&
+        lowestPrice > 0 &&
+        highestPrice > 0
+      ) {
+        lowestAmount = lowestPrice
+        highestAmount = highestPrice
+      }
     }
-  } else if (product[priceField] && typeof product[priceField] === 'number') {
+  } else if (product[priceField] && typeof product[priceField] === 'number' && product[priceField] > 0) {
     amount = product[priceField]
+  } else if (currency.code !== 'USD' && product.priceInUSD && product.priceInUSD > 0) {
+    // Fallback to USD price for non-USD currencies if available
+    amount = product.priceInUSD
   }
 
   return (

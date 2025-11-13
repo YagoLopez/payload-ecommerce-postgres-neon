@@ -65,7 +65,7 @@ export const StockIndicator: React.FC<Props> = ({ product }) => {
         }`}
       />
       <span className="text-sm font-medium">
-        {stockQuantity > 10 && 'In Stock: '}
+        {stockQuantity > 10 && 'In Stock'}
         {stockQuantity <= 10 && stockQuantity > 0 && `Only ${stockQuantity} left`}
         {(stockQuantity === 0 || !stockQuantity) && 'Out of Stock'}
       </span>
