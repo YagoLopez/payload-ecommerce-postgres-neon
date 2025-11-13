@@ -20,7 +20,7 @@ export class ProductsRepository {
       depth: 3,
       draft,
       limit: 1,
-      overrideAccess: true,
+      overrideAccess: draft,
       pagination: false,
       where: {
         and: [

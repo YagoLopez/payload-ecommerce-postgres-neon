@@ -111,7 +111,7 @@ export function VariantSelector({ product }: { product: Product }) {
                     router.replace(`${optionUrl}`, {
                       scroll: false,
                     })
-                    setTimeout(() => setLoading(null), 3000)
+                    setTimeout(() => setLoading(null), 2000)
                   }}
                   title={`${option.label} ${!isAvailableForSale ? ' (Out of Stock)' : ''}`}
                 >
