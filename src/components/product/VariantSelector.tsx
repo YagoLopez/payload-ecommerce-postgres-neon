@@ -100,7 +100,7 @@ export function VariantSelector({ product }: { product: Product }) {
                     'px-6 py-3 rounded-xl font-medium duration-300',
                     'hover:shadow-md hover:-translate-y-0.5',
                     {
-                      'bg-accent text-accent-foreground ring-2 ring-accent shadow-lg': isActive,
+                      'bg-gray-200 text-gray-500 ring-2 ring-gray-300 shadow-lg font-bold hover:bg-gray-200': isActive,
                       'opacity-50 cursor-not-allowed': !isAvailableForSale,
                     }
                   )}
@@ -111,7 +111,7 @@ export function VariantSelector({ product }: { product: Product }) {
                     router.replace(`${optionUrl}`, {
                       scroll: false,
                     })
-                    setTimeout(() => setLoading(null), 500)
+                    setTimeout(() => setLoading(null), 3000)
                   }}
                   title={`${option.label} ${!isAvailableForSale ? ' (Out of Stock)' : ''}`}
                 >
