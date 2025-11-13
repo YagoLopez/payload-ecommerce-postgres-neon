@@ -80,9 +80,9 @@ export function AddToCart({ product }: Props) {
       const existingQuantity = existingItem.quantity
 
       if (product.enableVariants) {
-        return existingQuantity >= (selectedVariant?.inventory || 0)
+        return existingQuantity > (selectedVariant?.inventory || 0)
       }
-      return existingQuantity >= (product.inventory || 0)
+      return existingQuantity > (product.inventory || 0)
     }
 
     if (product.enableVariants) {
