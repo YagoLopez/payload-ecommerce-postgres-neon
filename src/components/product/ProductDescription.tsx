@@ -4,7 +4,7 @@ import type { Product, Variant } from '@/payload-types'
 import { RichText } from '@/components/RichText'
 import { AddToCart } from '@/components/Cart/AddToCart'
 import { Price } from '@/components/Price'
-import React, { Suspense } from 'react'
+import React from 'react'
 
 import { VariantSelector } from './VariantSelector'
 import { useCurrency } from '@payloadcms/plugin-ecommerce/client/react'
@@ -66,36 +66,30 @@ export function ProductDescription({ product }: { product: Product }) {
           )}
         </div>
       </div>
-      
+
       {product.description ? (
         <div className="prose prose-lg max-w-none text-muted-foreground leading-relaxed">
           <RichText className="" data={product.description} enableGutter={false} />
         </div>
       ) : null}
-      
+
       <hr className="border-border/50" />
-      
+
       {hasVariants && (
         <>
           <div className="space-y-4">
-            <Suspense fallback={null}>
-              <VariantSelector product={product} />
-            </Suspense>
+            <VariantSelector product={product} />
           </div>
           <hr className="border-border/50" />
         </>
       )}
-      
+
       <div className="flex items-center justify-between py-2">
-        <Suspense fallback={null}>
-          <StockIndicator product={product} />
-        </Suspense>
+        <StockIndicator product={product} />
       </div>
 
       <div className="bg-primary-foreground/95 backdrop-blur-sm py-4 -mx-8 px-8 border-t border-border/50">
-        <Suspense fallback={null}>
-          <AddToCart product={product} />
-        </Suspense>
+        <AddToCart product={product} />
       </div>
     </div>
   )
