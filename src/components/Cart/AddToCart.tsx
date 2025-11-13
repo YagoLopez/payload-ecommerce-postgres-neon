@@ -10,6 +10,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { ShoppingCart } from 'lucide-react'
+
 type Props = {
   product: Product
 }

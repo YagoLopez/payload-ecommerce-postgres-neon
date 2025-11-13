@@ -20,7 +20,7 @@ export class ProductsRepository {
       depth: 3,
       draft,
       limit: 1,
-      overrideAccess: draft,
+      overrideAccess: true,
       pagination: false,
       where: {
         and: [
@@ -50,7 +50,7 @@ export class ProductsRepository {
     return await payload.find({
       collection: 'products',
       draft: false,
-      overrideAccess: false,
+      overrideAccess: true,
       select: {
         title: true,
         slug: true,

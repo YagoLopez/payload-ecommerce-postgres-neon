@@ -20,6 +20,7 @@ export function ProductDescription({ product }: { product: Product }) {
 
   if (hasVariants) {
     const priceField = `priceIn${currency.code}` as keyof Variant
+
     const variantsOrderedByPrice = product.variants?.docs
       ?.filter((variant) => variant && typeof variant === 'object')
       .sort((a, b) => {
@@ -37,8 +38,8 @@ export function ProductDescription({ product }: { product: Product }) {
         return 0
       }) as Variant[]
 
-    const lowestVariant = variantsOrderedByPrice[0][priceField]
-    const highestVariant = variantsOrderedByPrice[variantsOrderedByPrice.length - 1][priceField]
+    const lowestVariant = variantsOrderedByPrice?.[0][priceField]
+    const highestVariant = variantsOrderedByPrice?.[variantsOrderedByPrice.length - 1][priceField]
     if (
       variantsOrderedByPrice &&
       typeof lowestVariant === 'number' &&

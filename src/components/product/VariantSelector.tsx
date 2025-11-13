@@ -22,23 +22,23 @@ export function VariantSelector({ product }: { product: Product }) {
 
   return variantTypes?.map((type) => {
     if (!type || typeof type !== 'object') {
-      return <></>
+      return null
     }
 
     const options = type.options?.docs
 
     if (!options || !Array.isArray(options) || !options.length) {
-      return <></>
+      return null
     }
 
     return (
       <dl className="space-y-4" key={type.id}>
         <dt className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">{type.label}</dt>
         <dd className="flex flex-wrap gap-3">
-          <React.Fragment>
+          <>
             {options?.map((option) => {
               if (!option || typeof option !== 'object') {
-                return <></>
+                return null
               }
 
               const optionID = option.id
@@ -115,7 +115,7 @@ export function VariantSelector({ product }: { product: Product }) {
                 </Button>
               )
             })}
-          </React.Fragment>
+          </>
         </dd>
       </dl>
     )
