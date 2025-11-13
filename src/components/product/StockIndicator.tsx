@@ -52,11 +52,9 @@ export const StockIndicator: React.FC<Props> = ({ product }) => {
   if (product.enableVariants && !selectedVariant) {
     return null
   }
-// todo: remove
-  console.log('stockQuantity', stockQuantity)
 
   return (
-    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 border border-border">
+    <div className="inline-flex items-center gap-2 px-4 rounded-full bg-muted/50 border border-border">
       <div
         className={`h-2 w-2 rounded-full ${
           stockQuantity > 10
