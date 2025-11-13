@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { Loader2 } from 'lucide-react'
 import type { Product } from '@/payload-types'
 
 import { createUrl } from '@/utilities/createUrl'
@@ -12,6 +13,7 @@ export function VariantSelector({ product }: { product: Product }) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const [loading, setLoading] = React.useState<number | null>(null)
   const variants = product.variants?.docs
   const variantTypes = product.variantTypes
   const hasVariants = Boolean(product.enableVariants && variants?.length && variantTypes?.length)
@@ -95,23 +97,29 @@ export function VariantSelector({ product }: { product: Product }) {
                   variant={'outline'}
                   aria-disabled={!isAvailableForSale}
                   className={clsx(
-                    'px-6 py-3 rounded-xl font-medium transition-all duration-300',
+                    'px-6 py-3 rounded-xl font-medium duration-300',
                     'hover:shadow-md hover:-translate-y-0.5',
                     {
-                      'bg-accent text-accent-foreground ring-2 ring-accent shadow-lg scale-105': isActive,
+                      'bg-accent text-accent-foreground ring-2 ring-accent shadow-lg': isActive,
                       'opacity-50 cursor-not-allowed': !isAvailableForSale,
                     }
                   )}
                   disabled={!isAvailableForSale}
                   key={option.id}
                   onClick={() => {
+                    setLoading(option.id)
                     router.replace(`${optionUrl}`, {
                       scroll: false,
                     })
+                    setTimeout(() => setLoading(null), 500)
                   }}
                   title={`${option.label} ${!isAvailableForSale ? ' (Out of Stock)' : ''}`}
                 >
-                  {option.label}
+                  {loading === option.id ? (
+                      <Loader2 className="mx-6 h-4 w-4 animate-spin" />
+                  ) : (
+                    option.label
+                  )}
                 </Button>
               )
             })}
