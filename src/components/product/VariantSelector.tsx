@@ -7,19 +7,44 @@ import type { Product } from '@/payload-types'
 import { createUrl } from '@/utilities/createUrl'
 import clsx from 'clsx'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+
+interface LoadingState {
+  [optionId: string]: boolean
+}
 
 export function VariantSelector({ product }: { product: Product }) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const [loading, setLoading] = React.useState<number | null>(null)
+  const [loadingStates, setLoadingStates] = useState<LoadingState>({})
+  const [isNavigating, setIsNavigating] = useState(false)
   const variants = product.variants?.docs
   const variantTypes = product.variantTypes
   const hasVariants = Boolean(product.enableVariants && variants?.length && variantTypes?.length)
 
+  useEffect(() => {
+    setIsNavigating(false)
+    setLoadingStates({})
+  }, [searchParams])
+
   if (!hasVariants) {
     return null
+  }
+
+  const handleVariantChange = async (optionId: number, optionUrl: string) => {
+    setLoadingStates(prev => ({ ...prev, [optionId]: true }))
+    setIsNavigating(true)
+
+    try {
+      router.replace(optionUrl, {
+        scroll: false,
+      })
+    } catch (error) {
+      console.error('Navigation error:', error)
+      setLoadingStates(prev => ({ ...prev, [optionId]: false }))
+      setIsNavigating(false)
+    }
   }
 
   return variantTypes?.map((type) => {
@@ -35,7 +60,9 @@ export function VariantSelector({ product }: { product: Product }) {
 
     return (
       <dl className="space-y-4" key={type.id}>
-        <dt className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">{type.label}</dt>
+        <dt className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+          {type.label}
+        </dt>
         <dd className="flex flex-wrap gap-3">
           <>
             {options?.map((option) => {
@@ -81,7 +108,7 @@ export function VariantSelector({ product }: { product: Product }) {
                   // If we found a matching variant, set the variant ID in the search params.
                   optionSearchParams.set('variant', String(matchingVariant.id))
 
-                  isAvailableForSale = !!(matchingVariant.inventory && matchingVariant.inventory > 0);
+                  isAvailableForSale = !!(matchingVariant.inventory && matchingVariant.inventory > 0)
                 }
               }
 
@@ -92,31 +119,35 @@ export function VariantSelector({ product }: { product: Product }) {
                 Boolean(isAvailableForSale) &&
                 searchParams.get(optionKeyLowerCase) === String(optionID)
 
+              const isLoading = loadingStates[option.id] || false
+
               return (
                 <Button
                   variant={'outline'}
                   aria-disabled={!isAvailableForSale}
+                  aria-busy={isLoading}
                   className={clsx(
                     'px-6 py-3 rounded-xl font-medium duration-300',
                     'hover:shadow-md hover:-translate-y-0.5',
+                    'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
                     {
-                      'bg-gray-200 text-gray-500 ring-2 ring-gray-300 shadow-lg font-bold hover:bg-gray-200': isActive,
+                      'bg-primary text-primary-foreground ring-1 ring-primary ring-offset-1 shadow-lg font-bold hover:bg-primary/90': isActive,
                       'opacity-50 cursor-not-allowed': !isAvailableForSale,
+                      'opacity-75': isLoading,
                     }
                   )}
-                  disabled={!isAvailableForSale}
+                  disabled={!isAvailableForSale || isLoading}
                   key={option.id}
                   onClick={() => {
-                    setLoading(option.id)
-                    router.replace(`${optionUrl}`, {
-                      scroll: false,
-                    })
-                    setTimeout(() => setLoading(null), 2000)
+                    if (isLoading || !isAvailableForSale || isNavigating) return
+                    handleVariantChange(option.id, optionUrl).then()
                   }}
-                  title={`${option.label} ${!isAvailableForSale ? ' (Out of Stock)' : ''}`}
+                  title={`${option.label} ${!isAvailableForSale ? ' (Out of Stock)' : ''}${isLoading ? ' Loading' : ''}`}
                 >
-                  {loading === option.id ? (
-                      <Loader2 className="mx-6 h-4 w-4 animate-spin" />
+                  {isLoading ? (
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="mx-4 h-4 w-4 animate-spin" />
+                    </div>
                   ) : (
                     option.label
                   )}
