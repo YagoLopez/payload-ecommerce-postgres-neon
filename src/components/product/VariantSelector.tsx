@@ -22,6 +22,9 @@ export function VariantSelector({ product }: { product: Product }) {
   const variants = product.variants?.docs
   const variantTypes = product.variantTypes
   const hasVariants = Boolean(product.enableVariants && variants?.length && variantTypes?.length)
+  // todo: remove
+  console.log('variants', variants)
+  console.log('variantTypes', variantTypes)
 
   useEffect(() => {
     setIsNavigating(false)

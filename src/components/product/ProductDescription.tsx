@@ -4,7 +4,7 @@ import type { Product, Variant } from '@/payload-types'
 import { RichText } from '@/components/RichText'
 import { AddToCart } from '@/components/Cart/AddToCart'
 import { Price } from '@/components/Price'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 import { VariantSelector } from './VariantSelector'
 import { useCurrency } from '@payloadcms/plugin-ecommerce/client/react'
@@ -78,18 +78,24 @@ export function ProductDescription({ product }: { product: Product }) {
       {hasVariants && (
         <>
           <div className="space-y-4">
-            <VariantSelector product={product} />
+            <Suspense fallback="Loading...">
+              <VariantSelector product={product} />
+            </Suspense>
           </div>
           <hr className="border-border/50" />
         </>
       )}
 
       <div className="flex items-center justify-between py-2">
-        <StockIndicator product={product} />
+        <Suspense fallback="Loading...">
+          <StockIndicator product={product} />
+        </Suspense>
       </div>
 
       <div className="bg-primary-foreground/95 backdrop-blur-sm py-4 -mx-8 px-8 border-t border-border/50">
-        <AddToCart product={product} />
+        <Suspense fallback="Loading...">
+          <AddToCart product={product} />
+        </Suspense>
       </div>
     </div>
   )
