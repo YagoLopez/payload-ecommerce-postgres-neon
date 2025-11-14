@@ -4,7 +4,7 @@ import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 
 type FindAllOptions = {
-  searchValue?: string | string[],
+  searchValue?: string | string[] | null,
   sort?: string | string[],
   category?: string | string[],
 }
@@ -20,7 +20,7 @@ export class ProductsRepository {
       depth: 3,
       draft,
       limit: 1,
-      overrideAccess: draft,
+      overrideAccess: true,
       pagination: false,
       where: {
         and: [
