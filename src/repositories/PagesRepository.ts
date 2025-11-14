@@ -6,7 +6,7 @@ import { draftMode } from 'next/headers'
 const payload = await getPayload({ config: configPromise })
 
 export class PagesRepository {
-  static async getPageBySlug({ slug }: { slug: string }): Promise<Page | null> {
+  static async getPageBySlug(slug: string): Promise<Page | null> {
     const { isEnabled: draft } = await draftMode()
 
     const result = await payload.find({
