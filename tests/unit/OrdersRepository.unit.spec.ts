@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { 
-  mockUser, 
+  mockCurrentUser as mockUser,
   mockAdminUser,
   mockOrder, 
   mockOrderCompleted,

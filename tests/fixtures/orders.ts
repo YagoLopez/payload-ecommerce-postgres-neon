@@ -1,45 +1,4 @@
-import type { Order, User } from '@/payload-types'
-
-export const mockUser: User & { collection: 'users' } = {
-  collection: 'users',
-  id: 1,
-  email: 'test@example.com',
-  name: 'Test User',
-  roles: ['customer'],
-  orders: {
-    docs: [],
-    hasNextPage: false,
-    totalDocs: 0
-  },
-  cart: {
-    docs: [],
-    hasNextPage: false,
-    totalDocs: 0
-  },
-  addresses: {
-    docs: [],
-    hasNextPage: false,
-    totalDocs: 0
-  },
-  updatedAt: '2024-01-01T00:00:00.000Z',
-  createdAt: '2024-01-01T00:00:00.000Z',
-  resetPasswordToken: null,
-  resetPasswordExpiration: null,
-  salt: null,
-  hash: null,
-  loginAttempts: null,
-  lockUntil: null,
-  sessions: null,
-  password: null
-}
-
-export const mockAdminUser: User & { collection: 'users' } = {
-  ...mockUser,
-  id: 2,
-  email: 'admin@example.com',
-  name: 'Admin User',
-  roles: ['admin']
-}
+import type { Order } from '@/payload-types'
 
 export const mockOrder: Order = {
   id: 1,
