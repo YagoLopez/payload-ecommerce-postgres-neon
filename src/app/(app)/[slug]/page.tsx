@@ -25,7 +25,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Args): Promise<Metadata> {
   const { slug = 'home' } = await params
-  const page = await PagesRepository.getPageBySlug({ slug })
+  const page = await PagesRepository.getPageBySlug(slug)
 
   return generateMeta({ doc: page })
 }
@@ -39,7 +39,7 @@ type Args = {
 export default async function Page({ params }: Args) {
   const { slug = 'home' } = await params
 
-  let page = await PagesRepository.getPageBySlug({ slug })
+  let page = await PagesRepository.getPageBySlug(slug)
 
   // Remove this code once your website is seeded
   if (!page && slug === 'home') {
