@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
-import { mockEmptyPayloadFindResult, mockPayloadFindResult, mockProduct } from '../fixtures/products'
+import { mockEmptyPayloadFindResult, mockPayloadFindResult, mockProduct } from '../fixtures'
 
 // Create mock functions
 const mockGetPayload = vi.fn()

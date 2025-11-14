@@ -4,7 +4,7 @@ import {
   mockPayloadFindResultPages,
   mockEmptyPayloadFindResultPages,
   mockMultiplePagesResult
-} from '../fixtures/pages'
+} from '../fixtures'
 import { Page } from '@/payload-types'
 
 // Create mock functions
