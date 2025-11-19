@@ -1,4 +1,5 @@
 import type { Media, Product } from '@/payload-types'
+import { cache } from 'react'
 
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { GridTileImage } from '@/components/Grid/tile'
@@ -18,9 +19,13 @@ type Args = {
   }>
 }
 
+const getProductBySlugCached = cache(async ({ slug }: { slug: string }) =>
+  await ProductsRepository.getBySlug({ slug })
+)
+
 export async function generateMetadata({ params }: Args): Promise<Metadata> {
   const { slug } = await params
-  const product = await ProductsRepository.getBySlug({ slug })
+  const product = await getProductBySlugCached({ slug })
 
   if (!product) return notFound()
 
@@ -59,7 +64,7 @@ export async function generateMetadata({ params }: Args): Promise<Metadata> {
 
 export default async function ProductPage({ params }: Args) {
   const { slug } = await params
-  const product = await ProductsRepository.getBySlug({ slug })
+  const product = await getProductBySlugCached({ slug })
 
   if (!product) return notFound()
 
@@ -110,9 +115,7 @@ export default async function ProductPage({ params }: Args) {
   return (
     <>
       <script
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(productJsonLd),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
         type="application/ld+json"
       />
       <div className="container pt-8 pb-8">

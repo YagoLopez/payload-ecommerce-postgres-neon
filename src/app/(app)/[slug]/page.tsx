@@ -3,12 +3,14 @@ import type { Metadata } from 'next'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
-import { homeStaticData } from '@/endpoints/seed/home-static'
-import React from 'react'
+import React, { cache } from 'react'
 
-import type { Page } from '@/payload-types'
 import { notFound } from 'next/navigation'
 import { PagesRepository } from '@/repositories/PagesRepository'
+
+const getPageBySlugCached = cache(async (slug: string) =>
+  await PagesRepository.getPageBySlug(slug)
+)
 
 export async function generateStaticParams() {
   const pages = await PagesRepository.getAll()
@@ -25,7 +27,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Args): Promise<Metadata> {
   const { slug = 'home' } = await params
-  const page = await PagesRepository.getPageBySlug(slug)
+  const page = await getPageBySlugCached(slug)
 
   return generateMeta({ doc: page })
 }
@@ -39,12 +41,12 @@ type Args = {
 export default async function Page({ params }: Args) {
   const { slug = 'home' } = await params
 
-  let page = await PagesRepository.getPageBySlug(slug)
+  const page = await getPageBySlugCached(slug)
 
   // Remove this code once your website is seeded
-  if (!page && slug === 'home') {
-    page = homeStaticData() as Page
-  }
+  // if (!page && slug === 'home') {
+  //   page = homeStaticData() as Page
+  // }
 
   if (!page) {
     return notFound()
