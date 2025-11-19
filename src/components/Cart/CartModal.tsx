@@ -20,18 +20,28 @@ import { DeleteItemButton } from './DeleteItemButton'
 import { EditItemQuantityButton } from './EditItemQuantityButton'
 import { OpenCartButton } from './OpenCart'
 import { Button } from '@/components/ui/button'
+import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { Product } from '@/payload-types'
 
 export function CartModal() {
   const { cart } = useCart()
   const [isOpen, setIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const pathname = usePathname()
 
   useEffect(() => {
     // Close the cart modal when the pathname changes.
     setIsOpen(false)
+    setIsLoading(false)
   }, [pathname])
+
+  useEffect(() => {
+    // Reset loading state when modal closes
+    if (!isOpen) {
+      setIsLoading(false)
+    }
+  }, [isOpen])
 
   const totalQuantity = useMemo(() => {
     if (!cart || !cart.items || !cart.items.length) return undefined
@@ -175,9 +185,10 @@ export function CartModal() {
                     </div>
                   )}
 
-                  <Button asChild>
+                  <Button asChild onClick={() => setIsLoading(true)}>
                     <Link className="w-full" href="/checkout">
-                      Proceed to Checkout
+                      <LoadingSpinner show={isLoading} size="small" className="text-white" />
+                      {isLoading ? 'Loading...' : <span className="text-white font-bold">Proceed to Checkout</span>}
                     </Link>
                   </Button>
                 </div>
