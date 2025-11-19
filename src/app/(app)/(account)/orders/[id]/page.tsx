@@ -15,8 +15,6 @@ import { UsersRepository } from '@/repositories/UsersRepository'
 import { OrdersRepository } from '@/repositories/OrdersRepository'
 import { redirectIfUserNotLoggedIn } from '@/utilities/redirectIfUserNotLoggedIn'
 
-export const dynamic = 'force-dynamic'
-
 type PageProps = {
   params: Promise<{ id: string }>
   searchParams: Promise<{ email?: string }>
