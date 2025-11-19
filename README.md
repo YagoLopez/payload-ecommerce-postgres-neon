@@ -1,13 +1,19 @@
 # Payload Ecommerce Customized By Yago López
 
 This is a fork of the official [Payload Ecommerce](https://github.com/payloadcms/payload/blob/main/templates/ecommerce). 
-This repo includes a fully-working backend, enterprise-grade admin panel, and a beautifully designed, production-ready ecommerce website.
-
-This fork impoves the frontend Ecommerce user interface and the architecture of the code using the Repository Pattern to
-model and abstract the domain entities like, Pages and Products.
+This repo includes a fully-working backend, enterprise-grade admin panel, and a production-ready ecommerce website.
 
 ## Demo:
 https://payload-ecommerce-postgres-neon.vercel.app/
+
+## Improvements:
+
+- Bug-fixes
+- Architecture:
+  - React Server Component as data loaders
+  - Data Abstraction Layer using Repository Pattern
+- Improved performance
+- User interface enhancements
 
 Core features:
 
