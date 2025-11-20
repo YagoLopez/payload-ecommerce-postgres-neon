@@ -51,7 +51,9 @@ export function AddToCart({ product }: Props) {
           product: product.id,
           variant: selectedVariant?.id ?? undefined,
         })
-        toast.success('Item added to cart.')
+        toast.success('Item added to cart', {
+          closeButton: true
+        })
       } finally {
         setIsLoading(false)
       }
