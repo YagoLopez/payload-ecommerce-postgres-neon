@@ -52,7 +52,21 @@ export function AddToCart({ product }: Props) {
           variant: selectedVariant?.id ?? undefined,
         })
         toast.success('Item added to cart', {
-          closeButton: true
+          action: {
+            label: 'Close',
+            onClick: () => toast.dismiss(),
+          },
+          actionButtonStyle: {
+            backgroundColor: 'green',
+            color: '#ffffff',
+            border: 'none',
+            borderRadius: '6px',
+            fontSize: '14px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            outline: 'none',
+          },
         })
       } finally {
         setIsLoading(false)
