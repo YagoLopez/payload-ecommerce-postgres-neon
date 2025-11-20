@@ -1,14 +1,15 @@
 import { Grid } from '@/components/Grid'
 import { ProductGridItem } from '@/components/ProductGridItem'
 import { ProductsRepository } from '@/repositories/ProductsRepository'
-import React from 'react'
+import React, { Suspense } from 'react'
+import { ProductGridSkeleton } from '@/components/ProductGridSkeleton'
 
-export const metadata = {
+export const metadata: { description: string; title: string } = {
   description: 'Search for products in the store.',
   title: 'Shop',
 }
 
-type SearchParams = { [key: string]: string | string[] | undefined }
+type SearchParams = { [key: string]: string | undefined }
 
 type Props = {
   searchParams: Promise<SearchParams>
@@ -17,22 +18,69 @@ type Props = {
 export default async function ShopPage({ searchParams }: Props) {
   const { q: searchValue, sort, category } = await searchParams
 
+  return (
+    <div>
+      <Suspense fallback={<ProductGridSkeleton />}>
+        <ProductGrid 
+          searchValue={searchValue}
+          sort={sort}
+          category={category}
+        />
+      </Suspense>
+    </div>
+  )
+}
+
+// Separate component for search results - loads immediately
+function SearchResultsText({
+  searchValue,
+  totalProducts
+}: { 
+  searchValue?: string
+  totalProducts?: number
+}) {
+  // Since searchParams are available immediately, we can show this fast
+  if (totalProducts && searchValue) {
+    return (
+      <p className="mb-4">
+        Browsing <span className="font-bold capitalize">{totalProducts}</span> products
+      </p>
+    )
+  }
+
+  return null
+}
+
+// Separate async component for product fetching
+async function ProductGrid({ 
+  searchValue, 
+  sort, 
+  category 
+}: {
+  searchValue?: string
+  sort?: string
+  category?: string
+}) {
   const products = await ProductsRepository.getAll({
     searchValue,
     sort,
     category,
   })
 
-  const resultsText = products.docs.length > 1 ? 'results' : 'result'
+  const totalProducts = products.docs.length
+
+  const resultsText = totalProducts > 1 ? 'results' : 'result'
 
   return (
-    <div>
+    <>
+      <SearchResultsText searchValue={searchValue} totalProducts={totalProducts} />
+
       {searchValue ? (
         <p className="mb-4">
           {products.docs?.length === 0
             ? 'There are no products that match '
             : `Showing ${products.docs.length} ${resultsText} for `}
-          <span className="font-bold">&quot;{searchValue}&quot;</span>
+          <span className="font-bold">{`"${searchValue}"`}</span>
         </p>
       ) : null}
 
@@ -47,6 +95,6 @@ export default async function ShopPage({ searchParams }: Props) {
           })}
         </Grid>
       ) : null}
-    </div>
+    </>
   )
 }
