@@ -13,6 +13,8 @@ type Props = {
 export const ProductGridItem: React.FC<Props> = ({ product }) => {
   const { gallery, priceInUSD, title } = product
 
+  if (!product.slug) return
+
   let price = priceInUSD
 
   const variants = product.variants?.docs
