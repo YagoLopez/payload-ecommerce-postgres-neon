@@ -172,7 +172,7 @@ function RelatedProducts({ products }: { products: Product[] }) {
                     amount: product.priceInUSD!,
                     title: product.title,
                   }}
-                  media={product.gallery?.[0].image as Media}
+                  media={product.gallery?.[0]?.image as Media}
                 />
               </div>
             </Link>
