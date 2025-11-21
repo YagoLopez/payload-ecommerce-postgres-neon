@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { AlertTriangle, RefreshCw } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 export default function Error({
   error,
@@ -11,6 +12,7 @@ export default function Error({
   error: Error & { digest?: string }
   reset: () => void
 }) {
+  const router = useRouter()
   useEffect(() => {
     console.error('Shop page error:', error)
   }, [error])
@@ -28,7 +30,7 @@ export default function Error({
           Try again
         </Button>
         <Button 
-          onClick={() => window.location.href = '/'} 
+          onClick={() => router.push('/')}
           variant="outline"
         >
           Go Home

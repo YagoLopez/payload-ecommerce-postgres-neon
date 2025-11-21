@@ -32,12 +32,12 @@ export default async function ShopPage({ searchParams }: Props) {
 }
 
 // Separate component for search results - loads immediately
-function SearchResultsText({ totalProducts }: {
+function SearchResultsText({ searchValue, totalProducts }: {
   searchValue?: string
   totalProducts?: number
 }) {
   // Since searchParams are available immediately, we can show this fast
-  if (totalProducts) {
+  if (totalProducts && !searchValue) {
     return (
       <p className="mb-4">
         Browsing <span className="font-bold capitalize">{totalProducts}</span> products
