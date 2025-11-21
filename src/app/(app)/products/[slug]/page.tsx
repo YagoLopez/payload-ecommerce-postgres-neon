@@ -30,10 +30,8 @@ export async function generateMetadata({ params }: Args): Promise<Metadata> {
   if (!product) return notFound()
 
   const gallery = product.gallery?.filter((item) => typeof item.image === 'object') || []
-
   const metaImage = typeof product.meta?.image === 'object' ? product.meta?.image : undefined
   const canIndex = product._status === 'published'
-
   const seoImage = metaImage || (gallery.length ? (gallery[0]?.image as Media) : undefined)
 
   return {
@@ -174,7 +172,7 @@ function RelatedProducts({ products }: { products: Product[] }) {
                     amount: product.priceInUSD!,
                     title: product.title,
                   }}
-                  media={product.meta?.image as Media}
+                  media={product.gallery?.[0]?.image as Media}
                 />
               </div>
             </Link>
