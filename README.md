@@ -4,7 +4,8 @@ This is a fork of the official [Payload Ecommerce](https://github.com/payloadcms
 This repo includes a fully-working backend, enterprise-grade admin panel, and a production-ready ecommerce website.
 
 ## Demo:
-https://payload-ecommerce-postgres-neon.vercel.app/
+- Storefront: https://payload-ecommerce-postgres-neon.vercel.app
+- Dashboard Admin Panel: https://payload-ecommerce-postgres-neon.vercel.app/admin
 
 ## Improvements:
 
