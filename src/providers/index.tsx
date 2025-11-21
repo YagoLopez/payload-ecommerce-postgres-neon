@@ -12,38 +12,36 @@ export const Providers: React.FC<{
 }> = ({ children }) => {
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <HeaderThemeProvider>
-          <SonnerProvider />
-          <EcommerceProvider
-            enableVariants={true}
-            api={{
-              cartsFetchQuery: {
-                depth: 2,
-                populate: {
-                  products: {
-                    slug: true,
-                    title: true,
-                    gallery: true,
-                    inventory: true,
-                  },
-                  variants: {
-                    title: true,
-                    inventory: true,
-                  },
+      <HeaderThemeProvider>
+        <SonnerProvider />
+        <EcommerceProvider
+          enableVariants={true}
+          api={{
+            cartsFetchQuery: {
+              depth: 2,
+              populate: {
+                products: {
+                  slug: true,
+                  title: true,
+                  gallery: true,
+                  inventory: true,
+                },
+                variants: {
+                  title: true,
+                  inventory: true,
                 },
               },
-            }}
-            paymentMethods={[
-              stripeAdapterClient({
-                publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '',
-              }),
-            ]}
-          >
-            {children}
-          </EcommerceProvider>
-        </HeaderThemeProvider>
-      </AuthProvider>
+            },
+          }}
+          paymentMethods={[
+            stripeAdapterClient({
+              publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '',
+            }),
+          ]}
+        >
+          <AuthProvider>{children}</AuthProvider>
+        </EcommerceProvider>
+      </HeaderThemeProvider>
     </ThemeProvider>
   )
 }

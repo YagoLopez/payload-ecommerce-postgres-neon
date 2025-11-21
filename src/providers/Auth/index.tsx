@@ -1,6 +1,7 @@
 'use client'
 
 import type { User } from '@/payload-types'
+import { useCart } from '@payloadcms/plugin-ecommerce/client/react'
 
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
 
@@ -33,6 +34,7 @@ const Context = createContext({} as AuthContext)
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>()
+  const { clearCart } = useCart()
 
   // used to track the single event of logging in or logging out
   // useful for `useEffect` hooks that should only run once
@@ -105,6 +107,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (res.ok) {
         setUser(null)
+        clearCart()
         setStatus('loggedOut')
       } else {
         throw new Error('An error occurred while attempting to logout.')
