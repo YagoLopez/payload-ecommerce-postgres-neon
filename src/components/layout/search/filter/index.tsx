@@ -9,17 +9,17 @@ export type PathFilterItem = { path: string; title: string }
 
 function FilterItemList({ list }: { list: ListItem[] }) {
   return (
-    <React.Fragment>
+    <>
       {list.map((item: ListItem, i) => (
         <FilterItem item={item} key={i} />
       ))}
-    </React.Fragment>
+    </>
   )
 }
 
 export function FilterList({ list, title }: { list: ListItem[]; title?: string }) {
   return (
-    <React.Fragment>
+    <>
       <nav>
         {title ? (
           <h3 className="text-xs mb-2 text-neutral-500 dark:text-neutral-400">{title}</h3>
@@ -35,6 +35,6 @@ export function FilterList({ list, title }: { list: ListItem[]; title?: string }
           </Suspense>
         </ul>
       </nav>
-    </React.Fragment>
+    </>
   )
 }
