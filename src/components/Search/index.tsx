@@ -3,9 +3,9 @@
 import { cn } from '@/utilities/cn'
 import { createUrl } from '@/utilities/createUrl'
 import { useTopLoader } from 'nextjs-toploader'
-import { Loader2, Search as SearchIcon, X } from 'lucide-react'
+import { Search as SearchIcon, X } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import React, { useState, useCallback } from 'react'
+import React from 'react'
 
 type Props = {
   className?: string
@@ -15,12 +15,6 @@ export const Search: React.FC<Props> = ({ className }) => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const loader = useTopLoader()
-  const [isLoading, setIsLoading] = useState(false)
-
-  // Simple loading state for UI feedback only
-  const resetLoading = useCallback(() => {
-    setIsLoading(false)
-  }, [])
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -37,7 +31,6 @@ export const Search: React.FC<Props> = ({ className }) => {
 
     // Start top loader animation
     loader.start()
-    setIsLoading(true)
     router.push(createUrl('/shop', newParams))
   }
 
@@ -45,10 +38,7 @@ export const Search: React.FC<Props> = ({ className }) => {
     e.preventDefault()
     const newParams = new URLSearchParams(searchParams.toString())
     newParams.delete('q')
-
-    // Start top loader animation
     loader.start()
-    setIsLoading(true)
     router.push(createUrl('/shop', newParams))
   }
 
@@ -60,25 +50,16 @@ export const Search: React.FC<Props> = ({ className }) => {
       <input
         autoComplete="off"
         className={cn(
-          "w-full rounded-lg border bg-white px-4 py-2 pr-10 text-sm text-black placeholder:text-neutral-500 dark:border-neutral-800 dark:bg-black dark:text-white dark:placeholder:text-neutral-400",
-          isLoading && "opacity-70"
+          "w-full rounded-lg border bg-white px-4 py-2 pr-10 text-sm text-black placeholder:text-neutral-500 dark:border-neutral-800 dark:bg-black dark:text-white dark:placeholder:text-neutral-400"
         )}
         defaultValue={searchParams?.get('q') || ''}
         key={searchParams?.get('q')}
         name="search"
         placeholder="Search for products..."
         type="text"
-        disabled={isLoading}
-        onChange={() => {
-          if (isLoading) {
-            resetLoading()
-          }
-        }}
       />
       <div className="absolute right-0 top-0 mr-3 flex h-full items-center">
-        {isLoading ? (
-          <Loader2 className="h-4 w-4 animate-spin text-neutral-500" />
-        ) : hasSearchValue ? (
+        {hasSearchValue ? (
           <button
             type="button"
             onClick={clearSearch}
