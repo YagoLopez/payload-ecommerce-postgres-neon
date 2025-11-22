@@ -2,7 +2,7 @@
 
 import { cn } from '@/utilities/cn'
 import { createUrl } from '@/utilities/createUrl'
-import { SearchIcon } from 'lucide-react'
+import { SearchIcon, X } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 
@@ -30,6 +30,15 @@ export const Search: React.FC<Props> = ({ className }) => {
     router.push(createUrl('/shop', newParams))
   }
 
+  function clearSearch(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault()
+    const newParams = new URLSearchParams(searchParams.toString())
+    newParams.delete('q')
+    router.push(createUrl('/shop', newParams))
+  }
+
+  const hasSearchValue = searchParams?.get('q') && searchParams.get('q').length > 0
+
   return (
     <form className={cn('relative w-full', className)} onSubmit={onSubmit}>
       <input
@@ -42,7 +51,18 @@ export const Search: React.FC<Props> = ({ className }) => {
         type="text"
       />
       <div className="absolute right-0 top-0 mr-3 flex h-full items-center">
-        <SearchIcon className="h-4" />
+        {hasSearchValue ? (
+          <button
+            type="button"
+            onClick={clearSearch}
+            className="p-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+            aria-label="Clear search"
+          >
+            <X className="h-4" />
+          </button>
+        ) : (
+          <SearchIcon className="h-4" />
+        )}
       </div>
     </form>
   )
