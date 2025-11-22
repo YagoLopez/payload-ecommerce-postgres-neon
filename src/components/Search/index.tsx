@@ -2,9 +2,10 @@
 
 import { cn } from '@/utilities/cn'
 import { createUrl } from '@/utilities/createUrl'
+import { useTopLoader } from 'nextjs-toploader'
 import { Loader2, Search as SearchIcon, X } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 
 type Props = {
   className?: string
@@ -13,59 +14,12 @@ type Props = {
 export const Search: React.FC<Props> = ({ className }) => {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const loader = useTopLoader()
   const [isLoading, setIsLoading] = useState(false)
-  const loadingTimeoutRef = useRef<NodeJS.Timeout>(null)
-  const isNavigatingRef = useRef(false)
 
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (loadingTimeoutRef.current) {
-        clearTimeout(loadingTimeoutRef.current)
-      }
-    }
-  }, [])
-
-  // Reset loading when URL changes (navigation completed)
-  useEffect(() => {
-    if (isNavigatingRef.current) {
-      setIsLoading(false)
-      isNavigatingRef.current = false
-    }
-  }, [searchParams])
-
-  // Listen to Next.js navigation events
-  useEffect(() => {
-    // Subscribe to navigation events if available
-    if (typeof window !== 'undefined') {
-      const originalPush = router.push
-      router.push = ((...args: Parameters<typeof originalPush>) => {
-        setIsLoading(true)
-        isNavigatingRef.current = true
-        
-        // Set timeout as fallback (5 seconds)
-        loadingTimeoutRef.current = setTimeout(() => {
-          setIsLoading(false)
-          isNavigatingRef.current = false
-        }, 5000)
-
-        return originalPush.apply(router, args)
-      }) as typeof router.push
-    }
-
-    return () => {
-      if (typeof window !== 'undefined' && loadingTimeoutRef.current) {
-        clearTimeout(loadingTimeoutRef.current)
-      }
-    }
-  }, [router])
-
+  // Simple loading state for UI feedback only
   const resetLoading = useCallback(() => {
-    if (loadingTimeoutRef.current) {
-      clearTimeout(loadingTimeoutRef.current)
-    }
     setIsLoading(false)
-    isNavigatingRef.current = false
   }, [])
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -81,7 +35,9 @@ export const Search: React.FC<Props> = ({ className }) => {
       newParams.delete('q')
     }
 
-    resetLoading()
+    // Start top loader animation
+    loader.start()
+    setIsLoading(true)
     router.push(createUrl('/shop', newParams))
   }
 
@@ -90,7 +46,9 @@ export const Search: React.FC<Props> = ({ className }) => {
     const newParams = new URLSearchParams(searchParams.toString())
     newParams.delete('q')
 
-    resetLoading()
+    // Start top loader animation
+    loader.start()
+    setIsLoading(true)
     router.push(createUrl('/shop', newParams))
   }
 

@@ -2,6 +2,7 @@
 import React, { useCallback, useMemo } from 'react'
 
 import { Category } from '@/payload-types'
+import { useTopLoader } from 'nextjs-toploader'
 import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 import clsx from 'clsx'
 
@@ -13,6 +14,7 @@ export const CategoryItem: React.FC<Props> = ({ category }) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const loader = useTopLoader()
 
   const isActive = useMemo(() => {
     return searchParams.get('category') === String(category.id)
@@ -29,8 +31,10 @@ export const CategoryItem: React.FC<Props> = ({ category }) => {
 
     const newParams = params.toString()
 
+    // Start top loader animation
+    loader.start()
     router.push(pathname + '?' + newParams)
-  }, [category.id, isActive, pathname, router, searchParams])
+  }, [category.id, isActive, pathname, router, searchParams, loader])
 
   return (
     <button
