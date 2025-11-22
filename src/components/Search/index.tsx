@@ -37,7 +37,8 @@ export const Search: React.FC<Props> = ({ className }) => {
     router.push(createUrl('/shop', newParams))
   }
 
-  const hasSearchValue = searchParams?.get('q') && searchParams.get('q').length > 0
+  const searchValue = searchParams?.get('q')
+  const hasSearchValue = searchValue && searchValue.length > 0
 
   return (
     <form className={cn('relative w-full', className)} onSubmit={onSubmit}>
