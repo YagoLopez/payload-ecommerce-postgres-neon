@@ -39,7 +39,7 @@ export const Search: React.FC<Props> = ({ className }) => {
     // Subscribe to navigation events if available
     if (typeof window !== 'undefined') {
       const originalPush = router.push
-      router.push = ((...args: any[]) => {
+      router.push = ((...args: Parameters<typeof originalPush>) => {
         setIsLoading(true)
         isNavigatingRef.current = true
         
