@@ -8,6 +8,10 @@
       ],
       "disabled": true,
       "alwaysAllow": []
+    },
+    "git-mcp": {
+      "type": "streamable-http",
+      "url": "https://gitmcp.io/YagoLopez/https://github.com/YagoLopez/payload-ecommerce-postgres-neon"
     }
   }
 }
