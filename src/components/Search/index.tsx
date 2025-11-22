@@ -3,7 +3,7 @@
 import { cn } from '@/utilities/cn'
 import { createUrl } from '@/utilities/createUrl'
 import { useTopLoader } from 'nextjs-toploader'
-import { Search as SearchIcon, X } from 'lucide-react'
+import { CircleXIcon, Search as SearchIcon } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 
@@ -63,10 +63,12 @@ export const Search: React.FC<Props> = ({ className }) => {
           <button
             type="button"
             onClick={clearSearch}
-            className="p-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors border-2 rounded-md"
+            className="p-1 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors rounded-md"
             aria-label="Clear search"
+            title="Clear Search"
           >
-            <X className="h-4" />
+            <CircleXIcon className="h-4 w-4 text-gray-500" />
+
           </button>
         ) : (
           <SearchIcon className="h-4 text-neutral-500" />
