@@ -24,9 +24,10 @@ import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { Product } from '@/payload-types'
 
 export function CartModal() {
-  const { cart } = useCart()
+  const { cart, clearCart } = useCart()
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isClearing, setIsClearing] = useState(false)
 
   const pathname = usePathname()
 
@@ -40,6 +41,7 @@ export function CartModal() {
     // Reset loading state when modal closes
     if (!isOpen) {
       setIsLoading(false)
+      setIsClearing(false)
     }
   }, [isOpen])
 
@@ -184,6 +186,28 @@ export function CartModal() {
                       />
                     </div>
                   )}
+
+                  {/* Empty Cart Button */}
+                  <div className="flex justify-center mb-3">
+                    <Button
+                      variant="outline"
+                      onClick={async () => {
+                        setIsClearing(true)
+                        try {
+                          await clearCart()
+                        } catch (error) {
+                          console.error('Error clearing cart:', error)
+                        } finally {
+                          setIsClearing(false)
+                        }
+                      }}
+                      disabled={isClearing}
+                      className="w-full text-neutral-600 border-neutral-300 hover:bg-neutral-50 dark:text-neutral-400 dark:border-neutral-600 dark:hover:bg-neutral-800"
+                    >
+                      <LoadingSpinner show={isClearing} size="small" className="text-current" />
+                      {isClearing ? 'Clearing...' : 'Empty Cart'}
+                    </Button>
+                  </div>
 
                   <Button asChild onClick={() => setIsLoading(true)}>
                     <Link className="w-full" href="/checkout">

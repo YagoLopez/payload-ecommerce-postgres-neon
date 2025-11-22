@@ -376,7 +376,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ initialAddress }) =>
                     onClick={() => setPaymentData(null)}
                   >
                     <ArrowLeft className="h-4 w-4" />
-                    Cancel payment
+                    Go Back
                   </Button>
                 </div>
               </Elements>
