@@ -124,7 +124,7 @@ export const Search: React.FC<Props> = ({ className }) => {
           <button
             type="button"
             onClick={clearSearch}
-            className="p-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+            className="p-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors border-2 rounded-md shadow-md"
             aria-label="Clear search"
           >
             <X className="h-4" />
