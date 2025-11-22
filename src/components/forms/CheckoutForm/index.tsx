@@ -126,7 +126,7 @@ export const CheckoutForm: React.FC<Props> = ({
       {error && <Message error={error} />}
       <PaymentElement />
       <div className="mt-8 flex gap-4">
-        <Button disabled={!stripe || isLoading} type="submit" variant="default">
+        <Button disabled={!stripe || isLoading} type="submit" variant="default" className="w-[200px]">
           {isLoading ? (
             'Loading...'
           ) : (

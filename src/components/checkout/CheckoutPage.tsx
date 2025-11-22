@@ -10,7 +10,7 @@ import { useAuth } from '@/providers/Auth'
 import { useTheme } from '@/providers/Theme'
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
-import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Loader2, CircleXIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { Suspense, useCallback, useEffect, useState } from 'react'
@@ -37,7 +37,7 @@ interface CheckoutPageProps {
 export const CheckoutPage: React.FC<CheckoutPageProps> = ({ initialAddress }) => {
   const { user } = useAuth()
   const router = useRouter()
-  const { cart } = useCart()
+  const { cart, clearCart } = useCart()
   const [error, setError] = useState<null | string>(null)
   const { theme } = useTheme()
   /**
@@ -54,6 +54,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ initialAddress }) =>
   const [billingAddressSameAsShipping, setBillingAddressSameAsShipping] = useState(true)
   const [isProcessingPayment, setProcessingPayment] = useState(false)
   const [isLoadingPayment, setLoadingPayment] = useState(false)
+  const [isCancelingPayment, setCancelingPayment] = useState(false)
 
   const cartIsEmpty = !cart || !cart.items || !cart.items.length
 
@@ -115,6 +116,19 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ initialAddress }) =>
     },
     [billingAddress, billingAddressSameAsShipping, shippingAddress],
   )
+
+  const cancelPayment = async () => {
+    setCancelingPayment(true)
+    try {
+      await clearCart()
+      router.push('/shop')
+    } catch (error) {
+      console.error('Error canceling payment:', error)
+      toast.error('Error canceling payment. Please try again.')
+    } finally {
+      setCancelingPayment(false)
+    }
+  }
 
   if (!stripe) return null
 
@@ -322,7 +336,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ initialAddress }) =>
           </div>
         )}
 
-        <Suspense fallback={"Loading..."}>
+        <Suspense fallback={'Loading...'}>
           {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
           {/* @ts-expect-error */}
           {paymentData && paymentData?.['clientSecret'] && (
@@ -370,6 +384,24 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ initialAddress }) =>
                     billingAddress={billingAddress}
                     setProcessingPayment={setProcessingPayment}
                   />
+                  <Button
+                    variant="outline"
+                    className="self-start w-[200px]"
+                    onClick={cancelPayment}
+                    disabled={isCancelingPayment}
+                  >
+                    {isCancelingPayment ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Canceling...
+                      </>
+                    ) : (
+                      <>
+                        <CircleXIcon className="h-4 w-4" />
+                        Cancel Payment
+                      </>
+                    )}
+                  </Button>
                   <Button
                     variant="outline"
                     className="self-start"
