@@ -59,7 +59,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       <body>
         <Providers>
           <CartUIContextProvider>
-            <NextTopLoader />
+            <NextTopLoader height={6} />
             <LivePreviewListener />
             <AdminBar />
             <Header />
