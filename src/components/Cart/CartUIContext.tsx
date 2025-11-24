@@ -11,7 +11,7 @@ type CartUIContextType = {
 
 const CartUIContext = createContext<CartUIContextType | undefined>(undefined)
 
-export const CartUIContextProvider = ({ children }: { children: ReactNode }) => {
+export const CartUIProvider = ({ children }: { children: ReactNode }) => {
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -25,7 +25,7 @@ export const CartUIContextProvider = ({ children }: { children: ReactNode }) => 
 export const useCartUI = () => {
   const context = useContext(CartUIContext)
   if (context === undefined) {
-    throw new Error('useCartUI must be used within a CartUIContextProvider')
+    throw new Error('useCartUI must be used within a CartUIProvider')
   }
   return context
 }
