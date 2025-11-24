@@ -53,7 +53,7 @@ export const AdminBar: React.FC<{
   return (
     <>
       {user ? (
-        <div className="py-4 bg-black text-white">
+        <div className="bg-black text-white">
           <div className="container">
             <PayloadAdminBar
               {...adminBarProps}
@@ -71,6 +71,7 @@ export const AdminBar: React.FC<{
                 padding: 0,
                 position: 'relative',
                 zIndex: 'unset',
+                height:'50px'
               }}
             />
           </div>
