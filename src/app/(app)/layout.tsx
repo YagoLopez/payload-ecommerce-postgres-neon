@@ -6,6 +6,7 @@ import { Header } from '@/components/Header'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { ensureStartsWith } from '@/utilities/ensureStartsWith'
 import { Providers } from '@/providers'
+import { CartUIContextProvider } from '@/components/Cart/CartUIContext'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
@@ -57,12 +58,14 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       </head>
       <body>
         <Providers>
-          <NextTopLoader />
-          <LivePreviewListener />
-          <AdminBar />
-          <Header />
-          <main>{children}</main>
-          <Footer />
+          <CartUIContextProvider>
+            <NextTopLoader height={6} />
+            <LivePreviewListener />
+            <AdminBar />
+            <Header />
+            <main>{children}</main>
+            <Footer />
+          </CartUIContextProvider>
         </Providers>
       </body>
     </html>

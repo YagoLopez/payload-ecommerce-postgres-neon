@@ -12,6 +12,20 @@
     "git-mcp": {
       "type": "streamable-http",
       "url": "https://gitmcp.io/YagoLopez/https://github.com/YagoLopez/payload-ecommerce-postgres-neon"
+    },
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ],
+      "env": {
+        "DEFAULT_MINIMUM_TOKENS": ""
+      },
+      "alwaysAllow": [
+        "resolve-library-id",
+        "get-library-docs"
+      ]
     }
   }
 }

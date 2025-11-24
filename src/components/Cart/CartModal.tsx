@@ -22,28 +22,27 @@ import { OpenCartButton } from './OpenCart'
 import { Button } from '@/components/ui/button'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { Product } from '@/payload-types'
+import { useCartUI } from './CartUIContext'
 
 export function CartModal() {
   const { cart, clearCart } = useCart()
-  const [isOpen, setIsOpen] = useState(false)
+  const { isCartOpen, setIsCartOpen } = useCartUI()
   const [isLoading, setIsLoading] = useState(false)
   const [isClearing, setIsClearing] = useState(false)
 
   const pathname = usePathname()
 
   useEffect(() => {
-    // Close the cart modal when the pathname changes.
-    setIsOpen(false)
+    setIsCartOpen(false)
     setIsLoading(false)
-  }, [pathname])
+  }, [pathname, setIsCartOpen])
 
   useEffect(() => {
-    // Reset loading state when modal closes
-    if (!isOpen) {
+    if (!isCartOpen) {
       setIsLoading(false)
       setIsClearing(false)
     }
-  }, [isOpen])
+  }, [isCartOpen])
 
   const totalQuantity = useMemo(() => {
     if (!cart || !cart.items || !cart.items.length) return undefined
@@ -51,7 +50,7 @@ export function CartModal() {
   }, [cart])
 
   return (
-    <Sheet onOpenChange={setIsOpen} open={isOpen}>
+    <Sheet onOpenChange={setIsCartOpen} open={isCartOpen}>
       <SheetTrigger asChild>
         <OpenCartButton quantity={totalQuantity} />
       </SheetTrigger>
@@ -126,7 +125,7 @@ export function CartModal() {
                         <Link
                           className="z-30 flex flex-row space-x-4"
                           href={`/products/${(item.product as Product)?.slug}`}
-                          onClick={() => setIsOpen(false)}
+                          onClick={() => setIsCartOpen(false)}
                         >
                           <div className="relative h-16 w-16 cursor-pointer overflow-hidden rounded-md border border-neutral-300 bg-neutral-300 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800">
                             {image?.url && (
