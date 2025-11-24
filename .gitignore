@@ -22,6 +22,7 @@ test-results/
 # misc
 .DS_Store
 *.pem
+/.kilocode
 
 # debug
 npm-debug.log*
