@@ -1,3 +1,4 @@
+import { CartUIProvider } from '@/components/Cart/CartUIContext'
 import { AuthProvider } from '@/providers/Auth'
 import { EcommerceProvider } from '@payloadcms/plugin-ecommerce/client/react'
 import { stripeAdapterClient } from '@payloadcms/plugin-ecommerce/payments/stripe'
@@ -40,7 +41,7 @@ export const Providers: React.FC<{
               }),
             ]}
           >
-            {children}
+            <CartUIProvider>{children}</CartUIProvider>
           </EcommerceProvider>
         </HeaderThemeProvider>
       </AuthProvider>
