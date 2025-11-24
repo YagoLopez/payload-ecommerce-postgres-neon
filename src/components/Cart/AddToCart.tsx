@@ -10,6 +10,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { ShoppingCart } from 'lucide-react'
+import { useCartUI } from './CartUIContext'
 
 type Props = {
   product: Product
@@ -17,8 +18,8 @@ type Props = {
 
 export function AddToCart({ product }: Props) {
   const { addItem, cart } = useCart()
+  const { setIsCartOpen, isLoading, setIsLoading } = useCartUI()
   const searchParams = useSearchParams()
-  const [isLoading, setIsLoading] = useState(false)
 
   const variants = product.variants?.docs || []
 
@@ -53,9 +54,13 @@ export function AddToCart({ product }: Props) {
         })
         toast.success('Item added to cart', {
           action: {
-            label: 'Close',
-            onClick: () => toast.dismiss(),
+            label: 'Open Cart',
+            onClick: () => {
+              toast.dismiss()
+              setIsCartOpen(true)
+            },
           },
+          closeButton: true,
           actionButtonStyle: {
             backgroundColor: 'green',
             color: '#ffffff',
@@ -72,7 +77,7 @@ export function AddToCart({ product }: Props) {
         setIsLoading(false)
       }
     },
-    [addItem, product, selectedVariant],
+    [addItem, product, selectedVariant, setIsCartOpen],
   )
 
   const disabled = useMemo<boolean>(() => {
