@@ -57,7 +57,7 @@ export const plugins: Plugin[] = [
       },
       access: {
         read: publicAccess,
-        create: adminOnly,
+        create: publicAccess,
         update: adminOnly,
         delete: adminOnly,
       },
