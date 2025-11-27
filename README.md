@@ -21,7 +21,7 @@ This is a customized fork of the official [Payload Ecommerce](https://github.com
 
 ## Architecture
 
-<img src="C:\Users\Yago\WebstormProjects\payload-ecommerce-postgres-neon\architecture-schema.png" alt="architecture-schema" style="zoom:60%;" />
+<img src="architecture-schema.png" alt="architecture-schema" style="zoom:60%;" />
 
 ## Core Features
 
