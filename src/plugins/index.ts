@@ -12,6 +12,8 @@ import { getServerSideURL } from '@/utilities/getURL'
 import { ProductsCollection } from '@/collections/Products'
 import { adminOnly } from '@/access/adminOnly'
 import { publicAccess } from '@/access/publicAccess'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
+import { Media } from '@/collections/Media'
 
 const generateTitle: GenerateTitle<Product | Page> = ({ doc }) => {
   return doc?.title ? `${doc.title} | Payload Ecommerce Template` : 'Payload Ecommerce Template'
@@ -28,6 +30,12 @@ export const plugins: Plugin[] = [
     generateTitle,
     generateURL,
   }),
+  vercelBlobStorage({
+    collections: {
+      [Media.slug]: true,
+    },
+    token: process.env.BLOB_READ_WRITE_TOKEN || '',
+  }),
   formBuilderPlugin({
     fields: {
       payment: false,
@@ -38,7 +46,7 @@ export const plugins: Plugin[] = [
       },
       access: {
         read: publicAccess,
-        create: adminOnly,
+        create: publicAccess,
         update: adminOnly,
         delete: adminOnly,
       },
