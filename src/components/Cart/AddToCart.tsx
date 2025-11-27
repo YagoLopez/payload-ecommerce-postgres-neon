@@ -6,7 +6,7 @@ import type { Product, Variant } from '@/payload-types'
 import { useCart } from '@payloadcms/plugin-ecommerce/client/react'
 import clsx from 'clsx'
 import { useSearchParams } from 'next/navigation'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { toast } from 'sonner'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { ShoppingCart } from 'lucide-react'
@@ -60,8 +60,24 @@ export function AddToCart({ product }: Props) {
               setIsCartOpen(true)
             },
           },
-          closeButton: true,
+          cancel: {
+            label: 'Close',
+            onClick: () => toast.dismiss()
+          },
+          closeButton: false,
           actionButtonStyle: {
+            backgroundColor: 'green',
+            color: '#ffffff',
+            border: 'none',
+            borderRadius: '6px',
+            fontSize: '14px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            outline: 'none',
+            marginLeft: 0,
+          },
+          cancelButtonStyle: {
             backgroundColor: 'green',
             color: '#ffffff',
             border: 'none',

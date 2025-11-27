@@ -14,6 +14,7 @@ import { AddressItem } from '@/components/addresses/AddressItem'
 import { UsersRepository } from '@/repositories/UsersRepository'
 import { OrdersRepository } from '@/repositories/OrdersRepository'
 import { redirectIfUserNotLoggedIn } from '@/utilities/redirectIfUserNotLoggedIn'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 type PageProps = {
   params: Promise<{ id: string }>
@@ -72,67 +73,82 @@ export default async function Order({ params, searchParams }: PageProps) {
         )}
 
         <h1 className="text-sm uppercase font-mono px-2 bg-primary/10 rounded tracking-[0.07em]">
-          <span className="">{`Order #${order.id}`}</span>
+          <span>{`Order #${order.id}`}</span>
         </h1>
       </div>
 
-      <div className="bg-card border rounded-lg px-6 py-4 flex flex-col gap-12">
-        <div className="flex flex-col gap-6 lg:flex-row lg:justify-between">
-          <div className="">
-            <p className="font-mono uppercase text-primary/50 mb-1 text-sm">Order Date</p>
-            <p className="text-lg">
-              <time dateTime={order.createdAt}>
-                {formatDateTime({ date: order.createdAt, format: 'MMMM dd, yyyy' })}
-              </time>
-            </p>
-          </div>
-
-          <div className="">
-            <p className="font-mono uppercase text-primary/50 mb-1 text-sm">Total</p>
-            {order.amount && <Price className="text-lg" amount={order.amount} />}
-          </div>
-
-          {order.status && (
-            <div className="grow max-w-1/3">
-              <p className="font-mono uppercase text-primary/50 mb-1 text-sm">Status</p>
-              <OrderStatus className="text-sm" status={order.status} />
+      <div className="grid gap-4 p-4 rounded-lg shadow-lg border">
+        <Card className="bg-primary/10">
+          <CardHeader>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              <div className="flex flex-col gap-2">
+                <CardDescription className="font-mono uppercase">Order Date</CardDescription>
+                <p className="text-base">
+                  <time dateTime={order.createdAt}>
+                    {formatDateTime({ date: order.createdAt, format: 'MMMM dd, yyyy' })}
+                  </time>
+                </p>
+              </div>
+              <div className="flex flex-col gap-2">
+                <CardDescription className="font-mono uppercase">Total</CardDescription>
+                {order.amount && <Price className="text-base" amount={order.amount} />}
+              </div>
+              {order.status && (
+                <div className="flex flex-col gap-2">
+                  <CardDescription className="font-mono uppercase">Status</CardDescription>
+                  <OrderStatus className="text-base" status={order.status} />
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </CardHeader>
+        </Card>
 
         {order.items && (
-          <div>
-            <h2 className="font-mono text-primary/50 mb-4 uppercase text-sm">Items</h2>
-            <ul className="flex flex-col gap-6">
-              {order.items?.map((item, index) => {
-                if (!item.product || typeof item.product !== 'object') {
-                  return <div key={index}>This item is no longer available.</div>
-                }
+          <Card>
+            <CardHeader>
+              <CardTitle className="font-mono uppercase tracking-wider">Items</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="flex flex-col divide-y">
+                {order.items?.map((item, index) => {
+                  if (!item.product || typeof item.product !== 'object') {
+                    return (
+                      <li key={index} className="py-4 text-sm text-muted-foreground">
+                        This item is no longer available.
+                      </li>
+                    )
+                  }
 
-                const variant =
-                  item.variant && typeof item.variant === 'object' ? item.variant : undefined
+                  const variant =
+                    item.variant && typeof item.variant === 'object' ? item.variant : undefined
 
-                return (
-                  <li key={item.id}>
-                    <ProductItem
-                      product={item.product}
-                      quantity={item.quantity}
-                      variant={variant}
-                    />
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
+                  return (
+                    <li key={item.id} className="py-6">
+                      <ProductItem
+                        product={item.product}
+                        quantity={item.quantity}
+                        variant={variant}
+                      />
+                    </li>
+                  )
+                })}
+              </ul>
+            </CardContent>
+          </Card>
         )}
 
         {order.shippingAddress && (
-          <div>
-            <h2 className="font-mono text-primary/50 mb-4 uppercase text-sm">Shipping Address</h2>
-
-            {/* @ts-expect-error - some kind of type hell */}
-            <AddressItem address={order.shippingAddress} hideActions />
-          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle className="font-mono uppercase tracking-wider">
+                Shipping Address
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {/* @ts-expect-error - some kind of type hell */}
+              <AddressItem address={order.shippingAddress} hideActions />
+            </CardContent>
+          </Card>
         )}
       </div>
     </div>
