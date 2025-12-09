@@ -7,6 +7,7 @@ import { checkRole } from '@/access/utilities'
 
 import { ensureFirstUserIsAdmin } from './hooks/ensureFirstUserIsAdmin'
 import { adminOrReadOnly } from '@/access/adminOrReadOnly'
+import { User } from '@/payload-types'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -21,6 +22,7 @@ export const Users: CollectionConfig = {
     group: 'Registered Users',
     defaultColumns: ['name', 'email', 'roles'],
     useAsTitle: 'name',
+    hidden: ({ user }) => !checkRole(['admin'], user as unknown as User),
   },
   auth: {
     tokenExpiration: 1209600,
