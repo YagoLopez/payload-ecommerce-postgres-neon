@@ -40,7 +40,9 @@ export const OrderItem: React.FC<Props> = ({ order }) => {
           <div className="flex flex-col gap-2">
             <CardDescription className="font-mono uppercase">Total</CardDescription>
             <div className="flex items-center gap-2 text-base">
-              {order.amount && <Price amount={order.amount} currencyCode={order.currency ?? undefined} />}
+              {order.amount && (
+                <Price amount={order.amount} currencyCode={order.currency ?? undefined} />
+              )}
               <span className="text-muted-foreground text-sm">
                 ({order.items?.length} {itemsLabel})
               </span>
